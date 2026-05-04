@@ -1,0 +1,11 @@
+Metric,Value
+Decision Tree R² (Train),0.7877
+Decision Tree R² (Test),-0.2959
+Random Forest R² (Train),0.8630
+Random Forest R² (Test),0.3807
+RF Cross-Val R² (mean),0.2034
+RF RMSE,5.2246
+RF MAE,3.6367
+Critical TFR Threshold (ANC=80%),6.78
+Top Feature (RF),SurveyYear
+Correlation: TFR-ANC,-0.534

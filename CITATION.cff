@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Ghana ANC and Fertility Inequities — Part I: Subnational Ecological Study (1988-2022)"
+abstract: >
+ Reproducible analysis pipeline for a 34-year subnational ecological study of
+ antenatal care coverage and total fertility rate across Ghana's administrative
+ regions using nine DHS survey waves (1988-2022). Key novel contribution: the
+ Care Efficiency Index (CEI = ANC% / TFR) and spatial ANC-TFR decoupling
+ detection via Global Moran's I.
+authors:
+ - family-names: Ghanem
+ given-names: Valentine Golden
+ orcid: "https://orcid.org/0009-0002-8332-0220"
+ affiliation: "Ghana COCOBOD Cocoa Clinic, Accra, Ghana"
+ email: valentineghanem@gmail.com
+version: "1.0.0"
+date-released: "2026-04-30"
+license: MIT
+repository-code: "https://github.com/[author]/ghana-anc-fertility-part1"
+keywords:
+ - antenatal care
+ - fertility
+ - spatial epidemiology
+ - Ghana
+ - DHS
+ - care efficiency index
+ - Moran's I
+ - random forest
+ - ecological study
+ - STROBE
+references:
+ - type: article
+ title: "Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A 34-Year Subnational Ecological Study (1988-2022)"
+ authors:
+ - family-names: Ghanem
+ given-names: Valentine Golden
+ year: 2026
+ notes: "Submitted for publication. Part I of a two-part series."

@@ -1,0 +1,26 @@
+# Python dependencies — Ghana ANC Spatial Analysis
+# Tested with Python 3.11+
+# Install: pip install -r requirements.txt
+
+# Core data analysis
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Machine learning
+scikit-learn>=1.3.0
+
+# Spatial analysis
+geopandas>=0.14.0
+libpysal>=4.8.0
+esda>=2.6.0
+splot>=1.1.5
+
+# Visualisation
+matplotlib>=3.7.0
+plotly>=5.18.0
+
+# Word document generation (manuscript builder)
+# Node.js: npm install docx@9.6.1
+# Python fallback:
+python-docx>=1.1.0

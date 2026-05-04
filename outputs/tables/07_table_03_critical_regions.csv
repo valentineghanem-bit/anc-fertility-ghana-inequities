@@ -1,0 +1,13 @@
+Region,Risk_Level,Skilled_ANC,TFR,Care_Efficiency_Index,Recommended_Interventions
+Northern,Critical,83.38,5.81,14.59,"Strengthen ANC, reduce fertility"
+Upper West,Critical,86.4,5.23,17.05,"Strengthen ANC, reduce fertility"
+Central,Critical,90.18,5.18,17.96,"Strengthen ANC, reduce fertility"
+Volta,Critical,90.58,4.83,19.87,"Strengthen ANC, reduce fertility"
+Eastern,Critical,92.98,4.37,22.02,"Strengthen ANC, reduce fertility"
+Western,Critical,93.09,4.69,20.5,"Strengthen ANC, reduce fertility"
+Ahafo,Critical,93.3,5.28,18.54,"Strengthen ANC, reduce fertility"
+Ashanti,Critical,93.4,5.18,18.52,"Strengthen ANC, reduce fertility"
+Greater Accra,Critical,94.74,3.2,30.76,"Strengthen ANC, reduce fertility"
+Upper East,Critical,95.3,4.1,23.24,"Strengthen ANC, reduce fertility"
+..Northeast,Critical,95.6,6.6,14.48,"Strengthen ANC, reduce fertility"
+Savannah,Critical,95.9,5.8,16.53,"Strengthen ANC, reduce fertility"
