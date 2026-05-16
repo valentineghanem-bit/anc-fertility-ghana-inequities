@@ -45,7 +45,7 @@ print(f"Master Sheet shape: {master_df.shape}")
 def harmonize_region_name(region_name):
  """Map various region name formats to 16 modern Ghana regions"""
  if pd.isna(region_name):
- return None
+  return None
  
  region_name = str(region_name).strip().lower()
  
