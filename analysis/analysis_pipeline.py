@@ -73,13 +73,13 @@ def harmonize_region_name(region_name):
  }
  
  for key, value in region_mapping.items():
- if key in region_name:
- return value
- 
+  if key in region_name:
+   return value
+
  # If no mapping found, try exact match after cleanup
  for key, value in region_mapping.items():
- if region_name == key:
- return value
+  if region_name == key:
+   return value
  
  return region_name.title()
 
