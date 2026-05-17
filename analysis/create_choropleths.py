@@ -93,18 +93,18 @@ def build_voronoi_gdf(centroids_df, boundary_poly):
  polygons = []
  
  for i in range(n_regions):
- region_idx = vor.point_region[i]
- verts = vor.regions[region_idx]
- if -1 in verts or len(verts) == 0:
- polygons.append(None)
- continue
- poly = Polygon(vor.vertices[verts])
- clipped = poly.intersection(boundary_poly)
- polygons.append(clipped)
+  region_idx = vor.point_region[i]
+  verts = vor.regions[region_idx]
+  if -1 in verts or len(verts) == 0:
+   polygons.append(None)
+   continue
+   poly = Polygon(vor.vertices[verts])
+   clipped = poly.intersection(boundary_poly)
+   polygons.append(clipped)
  
- gdf = gpd.GeoDataFrame(centroids_df.copy(), geometry=polygons, crs='EPSG:4326')
- gdf = gdf[gdf.geometry.notna() & ~gdf.geometry.is_empty]
- return gdf
+   gdf = gpd.GeoDataFrame(centroids_df.copy(), geometry=polygons, crs='EPSG:4326')
+   gdf = gdf[gdf.geometry.notna() & ~gdf.geometry.is_empty]
+   return gdf
 
 gdf_base = build_voronoi_gdf(reg_centroids, ghana_poly)
 print("Voronoi GDF regions:", len(gdf_base))
@@ -158,20 +158,20 @@ def draw_map_base(ax, gdf, facecolor='#f0f0f0', edgecolor='white', lw=0.8):
 
 def add_region_labels(ax, gdf, col='Region', fontsize=6.5, color='#111'):
  for _, row in gdf.iterrows():
- if row.geometry is None or row.geometry.is_empty: continue
- c = row.geometry.centroid
- name = str(row[col])
+  if row.geometry is None or row.geometry.is_empty: continue
+  c = row.geometry.centroid
+  name = str(row[col])
  # Abbreviate long names
- abbrevs = {
- 'Greater Accra':'Gr. Accra','Upper East':'Upper\nEast',
- 'Upper West':'Upper\nWest','Western North':'W. North',
- 'North East':'N. East','Bono East':'Bono E.',
- }
- name = abbrevs.get(name, name)
- ax.text(c.x, c.y, name, fontsize=fontsize, ha='center', va='center',
- color=color, fontweight='normal',
- bbox=dict(boxstyle='round,pad=0.15', facecolor='white',
- alpha=0.6, edgecolor='none'))
+  abbrevs = {
+  'Greater Accra':'Gr. Accra','Upper East':'Upper\nEast',
+  'Upper West':'Upper\nWest','Western North':'W. North',
+  'North East':'N. East','Bono East':'Bono E.',
+  }
+  name = abbrevs.get(name, name)
+  ax.text(c.x, c.y, name, fontsize=fontsize, ha='center', va='center',
+  color=color, fontweight='normal',
+  bbox=dict(boxstyle='round,pad=0.15', facecolor='white',
+  alpha=0.6, edgecolor='none'))
 
 # ══════════════════════════════════════════════════════════════════════════
 # FIGURE C1 — ANC Coverage 2022 Choropleth
@@ -310,7 +310,7 @@ fig.patch.set_facecolor('white')
 for zone, color in ZONE_COLORS.items():
  sub = gdf_risk[gdf_risk['RiskZone']==zone]
  if len(sub):
- sub.plot(ax=ax, facecolor=color, edgecolor='white', linewidth=1.0, alpha=0.88)
+  sub.plot(ax=ax, facecolor=color, edgecolor='white', linewidth=1.0, alpha=0.88)
 gdf_risk[gdf_risk['RiskZone'].isna()].plot(ax=ax, facecolor='#cccccc',
  edgecolor='white', linewidth=1.0)
 
@@ -374,8 +374,8 @@ for idx, yr in enumerate(years):
 # Remove empty subplot
 if n_years < nrows*ncols:
  for extra in range(n_years, nrows*ncols):
- r,c = divmod(extra, ncols)
- axes[r][c].set_visible(False)
+  r,c = divmod(extra, ncols)
+  axes[r][c].set_visible(False)
 
 # Shared colorbar
 sm5 = cm.ScalarMappable(cmap=cmap_t, norm=norm_global)

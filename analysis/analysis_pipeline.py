@@ -219,10 +219,10 @@ def gini_coefficient(values):
  values = np.array(values)
  values = values[~np.isnan(values)]
  if len(values) < 2:
- return np.nan
- sorted_vals = np.sort(values)
- n = len(values)
- return (2 * np.sum(np.arange(1, n+1) * sorted_vals)) / (n * np.sum(sorted_vals)) - (n + 1) / n
+  return np.nan
+  sorted_vals = np.sort(values)
+  n = len(values)
+  return (2 * np.sum(np.arange(1, n+1) * sorted_vals)) / (n * np.sum(sorted_vals)) - (n + 1) / n
 
 # Get main ANC indicator
 anc_indicator = "Antenatal care from a skilled provider"
@@ -272,38 +272,38 @@ common_regions = set(baseline.index) & set(latest.index)
 regional_change_list = []
 for region in common_regions:
  try:
- anc_1st = baseline.loc[region, 'Skilled_ANC']
- anc_lst = latest.loc[region, 'Skilled_ANC']
- tfr_1st = baseline.loc[region, 'TFR']
- tfr_lst = latest.loc[region, 'TFR']
+  anc_1st = baseline.loc[region, 'Skilled_ANC']
+  anc_lst = latest.loc[region, 'Skilled_ANC']
+  tfr_1st = baseline.loc[region, 'TFR']
+  tfr_lst = latest.loc[region, 'TFR']
  
- if pd.notna(anc_1st) and pd.notna(anc_lst) and anc_1st != 0:
- anc_change = anc_lst - anc_1st
- anc_pct = (anc_change / anc_1st) * 100
- else:
- anc_change = np.nan
- anc_pct = np.nan
+  if pd.notna(anc_1st) and pd.notna(anc_lst) and anc_1st != 0:
+   anc_change = anc_lst - anc_1st
+   anc_pct = (anc_change / anc_1st) * 100
+  else:
+   anc_change = np.nan
+   anc_pct = np.nan
+
+  if pd.notna(tfr_1st) and pd.notna(tfr_lst) and tfr_1st != 0:
+   tfr_change = tfr_lst - tfr_1st
+   tfr_pct = (tfr_change / tfr_1st) * 100
+  else:
+   tfr_change = np.nan
+   tfr_pct = np.nan
  
- if pd.notna(tfr_1st) and pd.notna(tfr_lst) and tfr_1st != 0:
- tfr_change = tfr_lst - tfr_1st
- tfr_pct = (tfr_change / tfr_1st) * 100
- else:
- tfr_change = np.nan
- tfr_pct = np.nan
- 
- regional_change_list.append({
- 'Region': region,
- 'ANC_First': anc_1st,
- 'ANC_Last': anc_lst,
- 'ANC_Absolute_Change': anc_change,
- 'ANC_Percent_Change': anc_pct,
- 'TFR_First': tfr_1st,
- 'TFR_Last': tfr_lst,
- 'TFR_Absolute_Change': tfr_change,
- 'TFR_Percent_Change': tfr_pct
- })
+  regional_change_list.append({
+  'Region': region,
+  'ANC_First': anc_1st,
+  'ANC_Last': anc_lst,
+  'ANC_Absolute_Change': anc_change,
+  'ANC_Percent_Change': anc_pct,
+  'TFR_First': tfr_1st,
+  'TFR_Last': tfr_lst,
+  'TFR_Absolute_Change': tfr_change,
+  'TFR_Percent_Change': tfr_pct
+  })
  except:
- pass
+  pass
 
 regional_change = pd.DataFrame(regional_change_list)
 
@@ -401,85 +401,85 @@ try:
  # Moran's I for ANC
  anc_vals = spatial_data['Skilled_ANC'].dropna().values
  if len(anc_vals) > 3:
- moran_anc = Moran(anc_vals, w)
+  moran_anc = Moran(anc_vals, w)
  
  # LISA (Local Indicators of Spatial Association)
- lisa_anc = moran_local(anc_vals, w)
+  lisa_anc = moran_local(anc_vals, w)
  
  # Classify clusters
- spatial_data['LISA_Cluster'] = 'Non-significant'
+  spatial_data['LISA_Cluster'] = 'Non-significant'
  
  # High-High, High-Low, Low-High, Low-Low
- threshold = np.nanmean(anc_vals)
- lag_anc = np.array(w.sparse.dot(anc_vals))
+  threshold = np.nanmean(anc_vals)
+  lag_anc = np.array(w.sparse.dot(anc_vals))
  
- for i in range(len(anc_vals)):
- if i < len(lisa_anc.p_sim) and lisa_anc.p_sim[i] < 0.05:
- val = anc_vals[i]
- lag_val = lag_anc[i]
+  for i in range(len(anc_vals)):
+   if i < len(lisa_anc.p_sim) and lisa_anc.p_sim[i] < 0.05:
+    val = anc_vals[i]
+    lag_val = lag_anc[i]
  
- if val > threshold and lag_val > threshold:
- spatial_data.loc[i, 'LISA_Cluster'] = 'HH (High-High)'
+    if val > threshold and lag_val > threshold:
+     spatial_data.loc[i, 'LISA_Cluster'] = 'HH (High-High)'
  elif val > threshold and lag_val < threshold:
- spatial_data.loc[i, 'LISA_Cluster'] = 'HL (High-Low)'
+  spatial_data.loc[i, 'LISA_Cluster'] = 'HL (High-Low)'
  elif val < threshold and lag_val > threshold:
- spatial_data.loc[i, 'LISA_Cluster'] = 'LH (Low-High)'
+  spatial_data.loc[i, 'LISA_Cluster'] = 'LH (Low-High)'
  else:
- spatial_data.loc[i, 'LISA_Cluster'] = 'LL (Low-Low)'
+  spatial_data.loc[i, 'LISA_Cluster'] = 'LL (Low-Low)'
  
  # Temporal Moran's I by epoch
- temporal_epochs = [
- (1988, 1998, '1988-1998'),
- (1999, 2010, '1999-2010'),
- (2011, 2022, '2011-2022')
- ]
+  temporal_epochs = [
+  (1988, 1998, '1988-1998'),
+  (1999, 2010, '1999-2010'),
+  (2011, 2022, '2011-2022')
+  ]
  
- temporal_morans = []
- for start, end, label in temporal_epochs:
- epoch_data = analysis_panel[
- (analysis_panel['SurveyYear'] >= start) & 
- (analysis_panel['SurveyYear'] <= end)
- ].copy()
+  temporal_morans = []
+  for start, end, label in temporal_epochs:
+   epoch_data = analysis_panel[
+   (analysis_panel['SurveyYear'] >= start) & 
+   (analysis_panel['SurveyYear'] <= end)
+   ].copy()
  
- if len(epoch_data) > 0:
- epoch_data = epoch_data.merge(region_coords[['Region', 'Latitude', 'Longitude']], 
- on='Region', how='inner')
- epoch_data = epoch_data.sort_values('Region').reset_index(drop=True)
+   if len(epoch_data) > 0:
+    epoch_data = epoch_data.merge(region_coords[['Region', 'Latitude', 'Longitude']], 
+    on='Region', how='inner')
+    epoch_data = epoch_data.sort_values('Region').reset_index(drop=True)
  
- anc_epoch = epoch_data['Skilled_ANC'].dropna().values
- if len(anc_epoch) > 3:
- try:
- moran_epoch = Moran(anc_epoch, w)
- temporal_morans.append({
- 'Epoch': label,
- 'Morans_I': moran_epoch.I,
- 'P_value': moran_epoch.p_norm
- })
- except:
- pass
+    anc_epoch = epoch_data['Skilled_ANC'].dropna().values
+    if len(anc_epoch) > 3:
+     try:
+      moran_epoch = Moran(anc_epoch, w)
+      temporal_morans.append({
+      'Epoch': label,
+      'Morans_I': moran_epoch.I,
+      'P_value': moran_epoch.p_norm
+      })
+     except:
+      pass
  
- temporal_moran_df = pd.DataFrame(temporal_morans)
+  temporal_moran_df = pd.DataFrame(temporal_morans)
  
  # Save spatial results
- spatial_results = pd.DataFrame({
- 'Region': spatial_data['Region'],
- 'Skilled_ANC': spatial_data['Skilled_ANC'],
- 'TFR': spatial_data['TFR'],
- 'Uninsured_Rate': spatial_data['Uninsured_Rate'],
- 'LISA_Cluster': spatial_data['LISA_Cluster'],
- 'Latitude': spatial_data['Latitude'],
- 'Longitude': spatial_data['Longitude']
- })
+  spatial_results = pd.DataFrame({
+  'Region': spatial_data['Region'],
+  'Skilled_ANC': spatial_data['Skilled_ANC'],
+  'TFR': spatial_data['TFR'],
+  'Uninsured_Rate': spatial_data['Uninsured_Rate'],
+  'LISA_Cluster': spatial_data['LISA_Cluster'],
+  'Latitude': spatial_data['Latitude'],
+  'Longitude': spatial_data['Longitude']
+  })
  
- spatial_results.to_csv(f'{output_dir}04_spatial_analysis_lisa.csv', index=False)
- temporal_moran_df.to_csv(f'{output_dir}04_temporal_morans_i.csv', index=False)
+  spatial_results.to_csv(f'{output_dir}04_spatial_analysis_lisa.csv', index=False)
+  temporal_moran_df.to_csv(f'{output_dir}04_temporal_morans_i.csv', index=False)
  
- print(f"\nGlobal Moran's I (Uninsured Rate): {moran_uninsured.I:.4f} (p={moran_uninsured.p_norm:.4f})")
- print(f"Global Moran's I (ANC): {moran_anc.I:.4f} (p={moran_anc.p_norm:.4f})")
- print(f"\nLISA Cluster distribution:")
- print(spatial_data['LISA_Cluster'].value_counts())
- print(f"\nTemporal Moran's I by epoch:")
- print(temporal_moran_df.to_string())
+  print(f"\nGlobal Moran's I (Uninsured Rate): {moran_uninsured.I:.4f} (p={moran_uninsured.p_norm:.4f})")
+  print(f"Global Moran's I (ANC): {moran_anc.I:.4f} (p={moran_anc.p_norm:.4f})")
+  print(f"\nLISA Cluster distribution:")
+  print(spatial_data['LISA_Cluster'].value_counts())
+  print(f"\nTemporal Moran's I by epoch:")
+  print(temporal_moran_df.to_string())
  
 except Exception as e:
  print(f"Spatial analysis error: {str(e)}")
@@ -600,13 +600,13 @@ ml_data['TFR_zscore'] = stats.zscore(ml_data['TFR'].fillna(ml_data['TFR'].mean()
 def risk_classification(anc_z, tfr_z):
  """Classify risk zones based on ANC and TFR Z-scores"""
  if anc_z > 0.5 and tfr_z < 0.5:
- return 'Resilient' # High ANC, Low TFR
+  return 'Resilient' # High ANC, Low TFR
  elif anc_z > 0.5 and tfr_z > 0.5:
- return 'Workhorse' # High ANC, High TFR
+  return 'Workhorse' # High ANC, High TFR
  elif anc_z < -0.5 and tfr_z < 0.5:
- return 'Emerging' # Low ANC, Low TFR
+  return 'Emerging' # Low ANC, Low TFR
  else:
- return 'Critical' # Low ANC, High TFR
+  return 'Critical' # Low ANC, High TFR
 
 ml_data['Risk_Zone'] = ml_data.apply(
  lambda row: risk_classification(row['ANC_zscore'], row['TFR_zscore']), 
@@ -815,50 +815,50 @@ try:
  }
  
  for cluster in cluster_colors.keys():
- cluster_data = spatial_results[spatial_results['LISA_Cluster'] == cluster]
- if len(cluster_data) > 0:
- ax.scatter(cluster_data['Longitude'], cluster_data['Latitude'], 
- s=300, alpha=0.7, label=cluster, color=cluster_colors[cluster],
- edgecolors='black', linewidth=1.5)
+  cluster_data = spatial_results[spatial_results['LISA_Cluster'] == cluster]
+  if len(cluster_data) > 0:
+   ax.scatter(cluster_data['Longitude'], cluster_data['Latitude'], 
+   s=300, alpha=0.7, label=cluster, color=cluster_colors[cluster],
+   edgecolors='black', linewidth=1.5)
  
- ax.set_xlabel('Longitude', fontsize=12, fontweight='bold')
- ax.set_ylabel('Latitude', fontsize=12, fontweight='bold')
- ax.set_title('LISA Cluster Map: Spatial Association of ANC Access\n(High/Low ANC regions with spatial clustering)', 
- fontsize=14, fontweight='bold')
- ax.legend(loc='best', fontsize=10)
- ax.grid(True, alpha=0.3)
+   ax.set_xlabel('Longitude', fontsize=12, fontweight='bold')
+   ax.set_ylabel('Latitude', fontsize=12, fontweight='bold')
+   ax.set_title('LISA Cluster Map: Spatial Association of ANC Access\n(High/Low ANC regions with spatial clustering)', 
+   fontsize=14, fontweight='bold')
+   ax.legend(loc='best', fontsize=10)
+   ax.grid(True, alpha=0.3)
  
- plt.tight_layout()
- plt.savefig(f'{output_dir}06_figure_06_lisa_map.png', dpi=300, bbox_inches='tight')
- plt.close()
+   plt.tight_layout()
+   plt.savefig(f'{output_dir}06_figure_06_lisa_map.png', dpi=300, bbox_inches='tight')
+   plt.close()
  
- print("Saved: Figure 6 - LISA Cluster Map")
+   print("Saved: Figure 6 - LISA Cluster Map")
 except Exception as e:
  print(f"Skipped: Figure 6 - LISA Map ({str(e)})")
 
 # Figure 7: Temporal Moran's I
 try:
  if len(temporal_moran_df) > 0:
- fig7, ax = plt.subplots(figsize=(10, 6), dpi=300)
+  fig7, ax = plt.subplots(figsize=(10, 6), dpi=300)
  
- ax.plot(range(len(temporal_moran_df)), temporal_moran_df['Morans_I'], 
- marker='o', linewidth=3, markersize=10, color=color_palette[0])
- ax.axhline(y=0, color='black', linestyle='--', linewidth=1, alpha=0.5)
- ax.fill_between(range(len(temporal_moran_df)), 0, temporal_moran_df['Morans_I'], 
- alpha=0.3, color=color_palette[0])
+  ax.plot(range(len(temporal_moran_df)), temporal_moran_df['Morans_I'], 
+  marker='o', linewidth=3, markersize=10, color=color_palette[0])
+  ax.axhline(y=0, color='black', linestyle='--', linewidth=1, alpha=0.5)
+  ax.fill_between(range(len(temporal_moran_df)), 0, temporal_moran_df['Morans_I'], 
+  alpha=0.3, color=color_palette[0])
  
- ax.set_xticks(range(len(temporal_moran_df)))
- ax.set_xticklabels(temporal_moran_df['Epoch'])
- ax.set_ylabel("Moran's I Statistic", fontsize=12, fontweight='bold')
- ax.set_title("Temporal Evolution of Spatial Autocorrelation in ANC Access", 
- fontsize=14, fontweight='bold')
- ax.grid(True, alpha=0.3)
+  ax.set_xticks(range(len(temporal_moran_df)))
+  ax.set_xticklabels(temporal_moran_df['Epoch'])
+  ax.set_ylabel("Moran's I Statistic", fontsize=12, fontweight='bold')
+  ax.set_title("Temporal Evolution of Spatial Autocorrelation in ANC Access", 
+  fontsize=14, fontweight='bold')
+  ax.grid(True, alpha=0.3)
  
- plt.tight_layout()
- plt.savefig(f'{output_dir}06_figure_07_temporal_morans_i.png', dpi=300, bbox_inches='tight')
- plt.close()
+  plt.tight_layout()
+  plt.savefig(f'{output_dir}06_figure_07_temporal_morans_i.png', dpi=300, bbox_inches='tight')
+  plt.close()
  
- print("Saved: Figure 7 - Temporal Moran's I")
+  print("Saved: Figure 7 - Temporal Moran's I")
 except:
  print("Skipped: Figure 7 - Temporal Moran's I")
 
@@ -884,7 +884,7 @@ for idx, risk_zone in enumerate(['Critical', 'Emerging', 'Workhorse', 'Resilient
  ax.grid(True, alpha=0.3, axis='y')
  
  for spine in ['top', 'right']:
- ax.spines[spine].set_visible(False)
+  ax.spines[spine].set_visible(False)
 
 plt.suptitle('Risk Stratification Zone Profiles', fontsize=16, fontweight='bold')
 plt.tight_layout()
@@ -1019,22 +1019,22 @@ for year in sorted(analysis_panel['SurveyYear'].dropna().unique()):
  
  valid_tfr_anc = year_subset[['TFR', 'Skilled_ANC']].dropna()
  if len(valid_tfr_anc) > 2:
- corr = np.corrcoef(valid_tfr_anc['TFR'], valid_tfr_anc['Skilled_ANC'])[0, 1]
+  corr = np.corrcoef(valid_tfr_anc['TFR'], valid_tfr_anc['Skilled_ANC'])[0, 1]
  else:
- corr = np.nan
+  corr = np.nan
  
- gini = gini_coefficient(year_subset['Skilled_ANC'].values)
+  gini = gini_coefficient(year_subset['Skilled_ANC'].values)
  
- table2_data.append({
- 'SurveyYear': int(year),
- 'N_Regions': n_regions,
- 'ANC_Mean': round(anc_mean, 2),
- 'ANC_Std': round(year_subset['Skilled_ANC'].std(), 2),
- 'TFR_Mean': round(tfr_mean, 2),
- 'TFR_Std': round(year_subset['TFR'].std(), 2),
- 'TFR_ANC_Correlation': round(corr, 3),
- 'Gini_ANC': round(gini, 3)
- })
+  table2_data.append({
+  'SurveyYear': int(year),
+  'N_Regions': n_regions,
+  'ANC_Mean': round(anc_mean, 2),
+  'ANC_Std': round(year_subset['Skilled_ANC'].std(), 2),
+  'TFR_Mean': round(tfr_mean, 2),
+  'TFR_Std': round(year_subset['TFR'].std(), 2),
+  'TFR_ANC_Correlation': round(corr, 3),
+  'Gini_ANC': round(gini, 3)
+  })
 
 table2 = pd.DataFrame(table2_data)
 table2.to_csv(f'{output_dir}07_table_02_spatial_temporal_evolution.csv', index=False)

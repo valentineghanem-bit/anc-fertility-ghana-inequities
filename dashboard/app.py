@@ -48,7 +48,7 @@ GEO_JSON_PATH = os.path.join(BASE, '..', 'outputs', 'data', 'ghana_regions.geojs
 GEOJSON = None
 if os.path.exists(GEO_JSON_PATH):
  with open(GEO_JSON_PATH) as f:
- GEOJSON = json.load(f)
+  GEOJSON = json.load(f)
 
 # Ghana flag colours
 GH_GREEN = '#006B3F'
@@ -86,33 +86,33 @@ def fig_anc_trajectories(selected_regions=None):
  """Fig 2 – ANC coverage trajectories by region and belt."""
  d = df.dropna(subset=['Skilled_ANC_pct'])
  if selected_regions:
- d = d[d['Region'].isin(selected_regions)]
- fig = go.Figure()
- for region, grp in d.groupby('Region'):
- grp = grp.sort_values('SurveyYear')
- zone = grp['Geographic_Zone'].iloc[0]
- fig.add_trace(go.Scatter(
- x=grp['SurveyYear'], y=grp['Skilled_ANC_pct'],
- mode='lines+markers', name=region,
- line=dict(color=ZONE_COLORS.get(zone, '#888'), width=1.5),
- marker=dict(size=6),
- hovertemplate=f'<b>{region}</b><br>Year: %{{x}}<br>ANC: %{{y:.1f}}%<extra></extra>',
- ))
+  d = d[d['Region'].isin(selected_regions)]
+  fig = go.Figure()
+  for region, grp in d.groupby('Region'):
+   grp = grp.sort_values('SurveyYear')
+   zone = grp['Geographic_Zone'].iloc[0]
+   fig.add_trace(go.Scatter(
+   x=grp['SurveyYear'], y=grp['Skilled_ANC_pct'],
+   mode='lines+markers', name=region,
+   line=dict(color=ZONE_COLORS.get(zone, '#888'), width=1.5),
+   marker=dict(size=6),
+   hovertemplate=f'<b>{region}</b><br>Year: %{{x}}<br>ANC: %{{y:.1f}}%<extra></extra>',
+   ))
  # National mean
- nat = d.groupby('SurveyYear')['Skilled_ANC_pct'].mean().reset_index()
- fig.add_trace(go.Scatter(
- x=nat['SurveyYear'], y=nat['Skilled_ANC_pct'],
- mode='lines+markers', name='National Mean',
- line=dict(color=GH_BLACK, width=3, dash='dash'),
- marker=dict(size=8, symbol='diamond'),
- hovertemplate='National Mean<br>Year: %{x}<br>ANC: %{y:.1f}%<extra></extra>',
- ))
- fig.update_layout(**base_layout(
- title='Figure 2. Skilled ANC Coverage Trajectories by Region (1988–2022)',
- xtitle='Survey Year', ytitle='Skilled ANC Coverage (%)'
- ))
- fig.update_yaxes(range=[30, 105])
- return fig
+   nat = d.groupby('SurveyYear')['Skilled_ANC_pct'].mean().reset_index()
+   fig.add_trace(go.Scatter(
+   x=nat['SurveyYear'], y=nat['Skilled_ANC_pct'],
+   mode='lines+markers', name='National Mean',
+   line=dict(color=GH_BLACK, width=3, dash='dash'),
+   marker=dict(size=8, symbol='diamond'),
+   hovertemplate='National Mean<br>Year: %{x}<br>ANC: %{y:.1f}%<extra></extra>',
+   ))
+   fig.update_layout(**base_layout(
+   title='Figure 2. Skilled ANC Coverage Trajectories by Region (1988–2022)',
+   xtitle='Survey Year', ytitle='Skilled ANC Coverage (%)'
+   ))
+   fig.update_yaxes(range=[30, 105])
+   return fig
 
 
 def fig_tfr_anc_scatter(year=2022):
@@ -139,26 +139,26 @@ def fig_gini_trend():
  """Fig 11 – Gini coefficient over time."""
  gini_by_year = []
  for yr, grp in df.groupby('SurveyYear'):
- vals = grp['Skilled_ANC_pct'].dropna().values
- if len(vals) < 2:
- continue
- vals = np.sort(vals)
- n = len(vals)
- idx = np.arange(1, n + 1)
- g = (2 * (idx * vals).sum() / (n * vals.sum())) - (n + 1) / n
- gini_by_year.append({'SurveyYear': yr, 'Gini': round(g, 4)})
- gdf = pd.DataFrame(gini_by_year)
- fig = go.Figure()
- fig.add_trace(go.Bar(
- x=gdf['SurveyYear'], y=gdf['Gini'],
- marker_color=GH_GREEN, opacity=0.8,
- hovertemplate='Year: %{x}<br>Gini: %{y:.4f}<extra></extra>',
- ))
- fig.update_layout(**base_layout(
- title='Figure 11. Inter-Regional Gini Coefficient of ANC Coverage (1988–2022)',
- xtitle='Survey Year', ytitle='Gini Coefficient'
- ))
- return fig
+  vals = grp['Skilled_ANC_pct'].dropna().values
+  if len(vals) < 2:
+   continue
+   vals = np.sort(vals)
+   n = len(vals)
+   idx = np.arange(1, n + 1)
+   g = (2 * (idx * vals).sum() / (n * vals.sum())) - (n + 1) / n
+   gini_by_year.append({'SurveyYear': yr, 'Gini': round(g, 4)})
+   gdf = pd.DataFrame(gini_by_year)
+   fig = go.Figure()
+   fig.add_trace(go.Bar(
+   x=gdf['SurveyYear'], y=gdf['Gini'],
+   marker_color=GH_GREEN, opacity=0.8,
+   hovertemplate='Year: %{x}<br>Gini: %{y:.4f}<extra></extra>',
+   ))
+   fig.update_layout(**base_layout(
+   title='Figure 11. Inter-Regional Gini Coefficient of ANC Coverage (1988–2022)',
+   xtitle='Survey Year', ytitle='Gini Coefficient'
+   ))
+   return fig
 
 
 def fig_morans_temporal():
@@ -202,27 +202,27 @@ def fig_north_south_gap():
  SOUTH = ['Greater Accra', 'Central', 'Eastern', 'Western', 'Volta']
  gap_rows = []
  for yr, grp in df.groupby('SurveyYear'):
- n = grp[grp['Region'].isin(NORTH)]['Skilled_ANC_pct'].mean()
- s = grp[grp['Region'].isin(SOUTH)]['Skilled_ANC_pct'].mean()
- gap_rows.append({'SurveyYear': yr, 'Northern': n, 'Southern': s, 'Gap': s - n})
- gdf = pd.DataFrame(gap_rows)
- fig = go.Figure()
- fig.add_trace(go.Scatter(x=gdf['SurveyYear'], y=gdf['Southern'],
- mode='lines+markers', name='Southern Belt',
- line=dict(color=GH_GREEN, width=2)))
- fig.add_trace(go.Scatter(x=gdf['SurveyYear'], y=gdf['Northern'],
- mode='lines+markers', name='Northern Belt',
- line=dict(color=GH_RED, width=2)))
- fig.add_trace(go.Bar(x=gdf['SurveyYear'], y=gdf['Gap'],
- name='N–S Gap', marker_color='rgba(252,209,22,0.5)',
- yaxis='y2'))
- fig.update_layout(
- **base_layout(title='Figure 9. North–South ANC Gap Over Time',
- xtitle='Survey Year', ytitle='Mean Skilled ANC (%)'),
- yaxis2=dict(title='Gap (pp)', overlaying='y', side='right',
- showgrid=False, range=[0, 50]),
- )
- return fig
+  n = grp[grp['Region'].isin(NORTH)]['Skilled_ANC_pct'].mean()
+  s = grp[grp['Region'].isin(SOUTH)]['Skilled_ANC_pct'].mean()
+  gap_rows.append({'SurveyYear': yr, 'Northern': n, 'Southern': s, 'Gap': s - n})
+  gdf = pd.DataFrame(gap_rows)
+  fig = go.Figure()
+  fig.add_trace(go.Scatter(x=gdf['SurveyYear'], y=gdf['Southern'],
+  mode='lines+markers', name='Southern Belt',
+  line=dict(color=GH_GREEN, width=2)))
+  fig.add_trace(go.Scatter(x=gdf['SurveyYear'], y=gdf['Northern'],
+  mode='lines+markers', name='Northern Belt',
+  line=dict(color=GH_RED, width=2)))
+  fig.add_trace(go.Bar(x=gdf['SurveyYear'], y=gdf['Gap'],
+  name='N–S Gap', marker_color='rgba(252,209,22,0.5)',
+  yaxis='y2'))
+  fig.update_layout(
+  **base_layout(title='Figure 9. North–South ANC Gap Over Time',
+  xtitle='Survey Year', ytitle='Mean Skilled ANC (%)'),
+  yaxis2=dict(title='Gap (pp)', overlaying='y', side='right',
+  showgrid=False, range=[0, 50]),
+  )
+  return fig
 
 
 def fig_cei_bar():
@@ -268,20 +268,20 @@ def fig_adol_fertility():
  d = df.dropna(subset=['Adolescent_Fertility_Rate'])
  fig = go.Figure()
  for region, grp in d.groupby('Region'):
- grp = grp.sort_values('SurveyYear')
- zone = grp['Geographic_Zone'].iloc[0]
- fig.add_trace(go.Scatter(
- x=grp['SurveyYear'], y=grp['Adolescent_Fertility_Rate'],
- mode='lines+markers', name=region,
- line=dict(color=ZONE_COLORS.get(zone, '#888'), width=1.5),
- marker=dict(size=5),
- hovertemplate=f'<b>{region}</b><br>Year: %{{x}}<br>ASFR 15-19: %{{y:.0f}}<extra></extra>',
- ))
- fig.update_layout(**base_layout(
- title='Figure 10. Adolescent Fertility Rate Trends by Region (1988–2022)',
- xtitle='Survey Year', ytitle='ASFR 15–19 (per 1,000 women)'
- ))
- return fig
+  grp = grp.sort_values('SurveyYear')
+  zone = grp['Geographic_Zone'].iloc[0]
+  fig.add_trace(go.Scatter(
+  x=grp['SurveyYear'], y=grp['Adolescent_Fertility_Rate'],
+  mode='lines+markers', name=region,
+  line=dict(color=ZONE_COLORS.get(zone, '#888'), width=1.5),
+  marker=dict(size=5),
+  hovertemplate=f'<b>{region}</b><br>Year: %{{x}}<br>ASFR 15-19: %{{y:.0f}}<extra></extra>',
+  ))
+  fig.update_layout(**base_layout(
+  title='Figure 10. Adolescent Fertility Rate Trends by Region (1988–2022)',
+  xtitle='Survey Year', ytitle='ASFR 15–19 (per 1,000 women)'
+  ))
+  return fig
 
 
 def make_kpi_cards():
@@ -298,21 +298,21 @@ def make_kpi_cards():
  ]
  cards = []
  for label, value, color in kpis:
- cards.append(
- dbc.Col(
- dbc.Card([
- dbc.CardBody([
- html.H3(value, style={'color': color, 'fontWeight': 'bold',
- 'fontSize': '1.6rem', 'margin': 0}),
- html.P(label, style={'fontSize': '0.78rem', 'color': '#555',
- 'margin': 0, 'lineHeight': '1.2'}),
- ], style={'textAlign': 'center', 'padding': '10px 6px'}),
- ], style={'borderTop': f'4px solid {color}', 'borderRadius': '6px',
- 'boxShadow': '0 1px 6px rgba(0,0,0,0.08)'}),
- width=2,
- )
- )
- return cards
+  cards.append(
+  dbc.Col(
+  dbc.Card([
+  dbc.CardBody([
+  html.H3(value, style={'color': color, 'fontWeight': 'bold',
+  'fontSize': '1.6rem', 'margin': 0}),
+  html.P(label, style={'fontSize': '0.78rem', 'color': '#555',
+  'margin': 0, 'lineHeight': '1.2'}),
+  ], style={'textAlign': 'center', 'padding': '10px 6px'}),
+  ], style={'borderTop': f'4px solid {color}', 'borderRadius': '6px',
+  'boxShadow': '0 1px 6px rgba(0,0,0,0.08)'}),
+  width=2,
+  )
+  )
+  return cards
 
 
 # ─────────────────────────────────────────────────────────────────────────────
