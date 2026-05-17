@@ -1,24 +1,59 @@
 # Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220)
+[![CI](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220)
 
 **Author:** Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana
 **ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
+**Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana
 **Reporting standard:** STROBE
-**Date:** 2026
-**Status:** Part II of a longitudinal series on subnational maternal health inequity in Ghana
+**Date:** April 2026
+**Status:** Manuscript in preparation | Part II of Ghana ANC longitudinal series
 
-> Ghanem VG. *Temporal and spatial dynamics of antenatal care coverage and fertility inequities in Ghana: a subnational ecological study using Ghana Demographic and Health Surveys.* 2026.
-
----
-
-## Overview
-
-A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care (ANC) coverage and total fertility rate (TFR) across all 16 administrative regions of Ghana, using nine DHS survey waves. The study introduces the Care Efficiency Index (CEI = ANC% / TFR) as a novel composite indicator to expose persistent regional inequities obscured by national coverage convergence. Spatial autocorrelation analysis reveals a significant ANC–TFR decoupling by 2022, with the Northern Belt remaining a persistent high-TFR, historically low-ANC spatial cluster.
+> Valentine Golden Ghanem (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys.* GitHub repository. https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities
 
 ---
 
-## Key Findings
+## 1. Abstract
+
+A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care (ANC) coverage and total fertility rate (TFR) across all 16 administrative regions of Ghana, using nine DHS survey waves. The study introduces the **Care Efficiency Index** (CEI = ANC% / TFR) as a novel composite indicator to expose persistent regional inequities obscured by national coverage convergence. Spatial autocorrelation analysis reveals a significant ANC–TFR decoupling by 2022, with the Northern Belt remaining a persistent high-TFR, historically low-ANC spatial cluster.
+
+---
+
+## 2. Research Question & Aims
+
+- **Primary:** Characterise the 34-year (1988–2022) temporal and spatial dynamics of skilled ANC coverage and fertility across Ghana's regions.
+- **Secondary:** (a) Quantify subnational inequities using the novel Care Efficiency Index (CEI); (b) detect ANC–TFR spatial decoupling using global and local Moran's I; (c) identify the critical TFR threshold via Random Forest partial dependence; (d) stratify regions into policy priority zones.
+
+---
+
+## 3. Methods Summary
+
+| Method | Tool | Purpose |
+|--------|------|---------|
+| Gini coefficient decomposition | scipy | Inequality over time |
+| Global Moran's I (KNN k=4) | esda / libpysal | ANC and TFR spatial autocorrelation |
+| LISA (Rook contiguity) | esda | Local cluster detection |
+| Random Forest (n=200) | scikit-learn | ANC prediction and partial dependence |
+| Decision Tree (CART) | scikit-learn | Interpretable benchmark comparator |
+| Care Efficiency Index (CEI) | Custom (ANC% / TFR) | Novel composite performance indicator |
+| Risk Stratification | Custom (z-score quadrant) | Policy zone classification |
+| Mixed-effects models | lme4 (R) | Regional longitudinal trend decomposition |
+| Choropleth maps | GeoPandas + Plotly | Temporal spatial visualisation |
+
+---
+
+## 4. Data Sources
+
+| Source | Variables | Year | Access |
+|--------|-----------|------|--------|
+| Ghana DHS subnational | ANC coverage, TFR, regional indicators | 1988, 1993, 1998, 2003, 2008, 2014, 2016, 2019, 2022 | [dhsprogram.com](https://dhsprogram.com) (registration) |
+| Ghana administrative boundaries | Regional polygons | 2021 | [GADM](https://gadm.org) |
+
+> DHS data accessed under registration. Raw microdata are not redistributed in compliance with DHS access policies.
+
+---
+
+## 5. Key Findings
 
 | Metric | Value |
 |--------|-------|
@@ -32,24 +67,23 @@ A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care 
 
 ---
 
-## Repository Structure
+## 6. Repository Structure
 
 ```
 anc-fertility-ghana-inequities/
 ├── analysis/
-│   ├── analysis_pipeline.py        # Full analytical pipeline (all steps)
+│   ├── analysis_pipeline.py        # Full analytical pipeline
 │   ├── create_choropleths.py       # Choropleth map generation
 │   └── fix_figures_legibility.py   # Figure legibility corrections
 ├── app.py                          # Plotly Dash interactive web application
 ├── analysis.R                      # R: mixed-effects models + Gini decomposition
 ├── dashboard/
-│   └── ANC_Fertility_Dashboard_Ghana.html   # Self-contained HTML dashboard
+│   └── ANC_Fertility_Dashboard_Ghana.html
 ├── poster/
-│   └── ANC_Fertility_Poster_Ghana.html      # A0 conference poster (print-ready)
+│   └── ANC_Fertility_Poster_Ghana.html
 ├── outputs/
 │   ├── *.csv                       # Analysis output tables
-│   └── figures/
-│       └── 06_figure_*.png         # 12 manuscript figures + supplementary
+│   └── figures/06_figure_*.png     # 12 manuscript figures + supplementary
 ├── requirements.txt
 ├── renv.lock
 ├── CITATION.cff
@@ -58,91 +92,79 @@ anc-fertility-ghana-inequities/
 
 ---
 
-## Quick Start
+## 7. Reproducibility
 
-### 1. Clone
+### 7.1 Requirements
+- Python 3.12 (see `requirements.txt` for pinned versions)
+- R 4.3+ (for R scripts; see `renv.lock` or `analysis.R` header for pinned packages)
+- Random seed: 42 throughout (set via `random_state=42` and `np.random.seed(42)`)
+- Estimated runtime: ~5 minutes on a standard laptop
+- Tested on: Ubuntu 22.04 / macOS 14 / Windows 11 (CI: GitHub Actions)
 
+### 7.2 Clone & install
 ```bash
 git clone https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities.git
 cd anc-fertility-ghana-inequities
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
+# For R scripts (optional):
+Rscript -e "if (!requireNamespace('renv', quietly=TRUE)) install.packages('renv'); renv::restore()"
 ```
 
-### 3. Run the pipeline
-
+### 7.3 Run the analytical pipeline
 ```bash
 cd analysis
 python analysis_pipeline.py
+# Then choropleths and legibility fixes:
+python create_choropleths.py
+python fix_figures_legibility.py
+# R mixed-effects:
+Rscript ../analysis.R
 ```
 
-### 4. Run tests
-
+### 7.4 Run the test suite
 ```bash
 pytest tests/ -v
 ```
 
-### 5. Open the interactive dashboard
-
+### 7.5 Launch the interactive Dash application
 ```bash
 python app.py
-# Visit http://127.0.0.1:8050
+# Navigate to http://127.0.0.1:8050 in your browser
 ```
 
-Or open `dashboard/ANC_Fertility_Dashboard_Ghana.html` directly in any modern browser. No server required.
+### 7.6 Open the static HTML dashboard
+Open `dashboard/ANC_Fertility_Dashboard_Ghana.html` in any modern browser. No server required.
 
 ---
 
-## Data Sources
+## 8. Outputs
 
-| Source | Variables | Year | Access |
-|--------|-----------|------|--------|
-| Ghana DHS subnational | ANC coverage, TFR, regional indicators | 1988, 1993, 1998, 2003, 2008, 2014, 2016, 2019, 2022 | [dhsprogram.com](https://dhsprogram.com) (free registration) |
-| Ghana administrative boundaries | Regional polygons | 2021 | [GADM](https://gadm.org) |
-
-> DHS data accessed under registration. Raw microdata are not redistributed in compliance with DHS access policies.
-
----
-
-## Methods Summary
-
-| Method | Tool | Purpose |
-|--------|------|---------|
-| Gini coefficient | scipy | Inequality decomposition over time |
-| Global Moran's I | esda / libpysal (KNN k=4) | ANC and TFR spatial autocorrelation |
-| LISA | esda / libpysal (Rook contiguity) | Local cluster detection |
-| Random Forest | scikit-learn (n=200) | ANC prediction; partial dependence |
-| Decision Tree (CART) | scikit-learn | Benchmark comparator |
-| Partial Dependence | scikit-learn | Critical TFR threshold identification |
-| Care Efficiency Index | Custom (ANC% / TFR) | Novel composite performance indicator |
-| Risk Stratification | Custom (z-score quadrant) | Policy zone classification |
-| Mixed-effects models | lme4 (R) | Regional longitudinal trend decomposition |
-| Choropleth maps | GeoPandas + Plotly | Temporal spatial visualisation |
+- **Interactive Dash app:** `app.py` — `python app.py` → http://127.0.0.1:8050
+- **Static HTML dashboard:** `dashboard/ANC_Fertility_Dashboard_Ghana.html`
+- **A0 poster:** `poster/ANC_Fertility_Poster_Ghana.html`
+- **Figures:** `outputs/figures/06_figure_*.png` — 12 manuscript + supplementary (300 DPI)
+- **Tables:** `outputs/*.csv`
 
 ---
 
-## Reproducibility
+## 9. Reporting Standard
 
-- Random seed: 42 throughout
-- Reporting: STROBE
-- All random seeds set explicitly (`random_state=42`)
-- Python 3.12 | R 4.3+
-- Runtime: ~5 minutes on a standard laptop
+This study follows the **STROBE** (Strengthening the Reporting of Observational Studies in Epidemiology) reporting guideline for observational ecological studies.
 
 ---
 
-## Ethical Statement
+## 10. Ethical Statement
 
 This study used exclusively de-identified, publicly available secondary data from the Ghana Demographic and Health Survey programme. No primary data collection from human participants was conducted. DHS data accessed under registration from [dhsprogram.com](https://dhsprogram.com).
 
 ---
 
-## Citation
+## 11. Citation
 
+**APA:**
+Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys*. GitHub. https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities
+
+**BibTeX:**
 ```bibtex
 @misc{ghanem2026ancfertility,
   author = {Ghanem, Valentine Golden},
@@ -152,17 +174,32 @@ This study used exclusively de-identified, publicly available secondary data fro
 }
 ```
 
----
-
-## License
-
-MIT — see [LICENSE](LICENSE) for details.
+A machine-readable citation is provided in `CITATION.cff`.
 
 ---
 
-## Contact
+## 12. License
 
-Valentine Golden Ghanem
-Ghana COCOBOD Cocoa Clinic, Accra, Ghana
-valentineghanem@gmail.com
-ORCID: [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
+Code is released under the **MIT License** — see [LICENSE](LICENSE) for details. Outputs and figures: CC BY 4.0.
+
+---
+
+## 13. Author & Contact
+
+- **Valentine Golden Ghanem**
+  Ghana COCOBOD Cocoa Clinic, Accra, Ghana
+  Email: [valentineghanem@gmail.com](mailto:valentineghanem@gmail.com)
+  ORCID: [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
+
+---
+
+## 14. Acknowledgements
+
+- **Ghana Demographic and Health Survey programme** (ICF International) for survey data access under signed Data Use Agreement.
+- **Ghana Statistical Service** for the 2021 Population and Housing Census and administrative boundary data.
+- **WHO Global Health Observatory** for national-level indicators.
+- **AIPOCH** (Anti-hallucination Pipeline for Open Computational Health) v6.0 quad-connector citation verification (PubMed · Consensus · Scholar · Scite).
+
+---
+
+*This README follows the AIPOCH v6.0 standardised research-output template (May 2026). All repository READMEs in the [valentineghanem-bit](https://github.com/valentineghanem-bit) organisation share this structure.*
