@@ -56,7 +56,7 @@ tr:hover td{background:#f8faff}
   <div class="panel full"><h3>Regional Distribution — ANC4+ (%)</h3><div id="regPanel"></div></div>
   <div class="panel"><h3>ML Model Performance</h3><table><thead><tr><th>Model</th><th>Metric</th></tr></thead><tbody><tr><td>XGBoost</td><td>81%</td></tr><tr><td>Random Forest</td><td>74%</td></tr><tr><td>GWR</td><td>68%</td></tr></tbody></table></div>
   <div class="panel"><h3>SHAP Feature Importance</h3><table><thead><tr><th>Feature</th><th>Mean |SHAP|</th></tr></thead><tbody><tr><td>Poverty incidence</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:120px"></div><span style="font-size:.75em;color:#555">3.20</span></div></td></tr><tr><td>Illiteracy rate</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:105px"></div><span style="font-size:.75em;color:#555">2.80</span></div></td></tr><tr><td>Distance to facility</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:90px"></div><span style="font-size:.75em;color:#555">2.40</span></div></td></tr><tr><td>NHIS coverage</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:75px"></div><span style="font-size:.75em;color:#555">2.00</span></div></td></tr><tr><td>Skilled delivery %</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:64px"></div><span style="font-size:.75em;color:#555">1.70</span></div></td></tr><tr><td>Youth dependency</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:52px"></div><span style="font-size:.75em;color:#555">1.40</span></div></td></tr><tr><td>Urbanicity</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:41px"></div><span style="font-size:.75em;color:#555">1.10</span></div></td></tr><tr><td>Unmet FP need</td><td><div style="display:flex;align-items:center;gap:6px"><div style="background:#1a5276;height:12px;border-radius:2px;width:30px"></div><span style="font-size:.75em;color:#555">0.80</span></div></td></tr></tbody></table></div>
-  <div class="panel"><h3>Data Coverage Timeline</h3><div id="tlPanel"></div></div>
+  <div class="panel"><h3>Data Coverage Timeline</h3><div id="scPanel" style="width:100%;min-height:240px"></div></div>
   <div class="panel"><h3>Methods Summary</h3><table><thead><tr><th>Method</th><th>Tool</th><th>Purpose</th></tr></thead><tbody><tr><td>Bivariate LISA</td><td style="color:#666;font-size:.82em">PySAL/esda</td><td style="color:#444;font-size:.82em">Spatial cluster detection</td></tr><tr><td>GWR</td><td style="color:#666;font-size:.82em">GWModel (R)</td><td style="color:#444;font-size:.82em">Geographically weighted regression</td></tr><tr><td>XGBoost</td><td style="color:#666;font-size:.82em">scikit-learn</td><td style="color:#444;font-size:.82em">Gradient boosting ML</td></tr><tr><td>SHAP</td><td style="color:#666;font-size:.82em">shap</td><td style="color:#444;font-size:.82em">Feature importance</td></tr><tr><td>LOROCV</td><td style="color:#666;font-size:.82em">custom</td><td style="color:#444;font-size:.82em">Leave-one-region-out CV</td></tr></tbody></table></div>
   <div class="panel full"><h3>Key Findings</h3><table><thead><tr><th>Finding</th><th>Result</th></tr></thead><tbody><tr><td>ANC4+ Moran's I</td><td><strong>0.68 (p<0.001)</strong></td></tr><tr><td>North-South clusters</td><td><strong>HH in North, LL in South</strong></td></tr><tr><td>Top predictor</td><td><strong>Poverty incidence (SHAP 3.2)</strong></td></tr><tr><td>Model R²</td><td><strong>0.81 (LOROCV)</strong></td></tr><tr><td>Disparity ratio</td><td><strong>2.8× NE vs. Accra</strong></td></tr></tbody></table></div>
 </div>
@@ -83,14 +83,17 @@ function showTip(e,h){tip.innerHTML=h;tip.style.display='block';moveTip(e);}
 function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}
 function hideTip(){tip.style.display='none';}
 
+// Region label positions — shared by choropleth and LISA maps (manuscript style)
+const RLBL=[[389,554,'Gr.Accra'],[214,457,'Ashanti'],[274,572,'Central'],[341,504,'Eastern'],[155,598,'Western'],[476,483,'Volta'],[440,330,'Oti'],[244,347,'Bono E'],[114,431,'Ahafo'],[98,372,'Bono'],[70,494,'W.North'],[322,45,'UE'],[105,81,'UW'],[364,186,'Northern'],[220,220,'Savannah'],[357,94,'NE']];
+
 function svgEl(t,a,p){const e=document.createElementNS('http://www.w3.org/2000/svg',t);for(const[k,v]of Object.entries(a||{}))e.setAttribute(k,v);if(p)p.appendChild(e);return e;}
 
 function renderChoropleth(){
   const c=document.getElementById('cPanel');c.innerHTML='';
   const vals=REGION.map(d=>d.anc);
   const mn=Math.min(...vals),mx=Math.max(...vals);
-  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 660',style:'display:block;max-height:320px'},c);
-  svgEl('rect',{x:0,y:0,width:560,height:660,fill:'#ecf0f1'},svg);
+  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 700',style:'display:block;max-height:340px'},c);
+  svgEl('rect',{x:0,y:0,width:560,height:700,fill:'#ecf0f1'},svg);
   for(const d of DSVG){
     const reg=d.r;
     const rd=DDATA[d.n]||REGION.find(r=>r.name===reg);
@@ -102,39 +105,66 @@ function renderChoropleth(){
     const tipH='<strong>'+d.n+'</strong><br><em>'+reg+'</em><br>'+PL+': '+(v||'–')+(rc.lisa?'<br>LISA: '+(LISA_LABELS[rc.lisa]||rc.lisa):'');
     if(d.dot){
       const el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'rgba(255,255,255,0.6)','stroke-width':'0.5',cursor:'pointer'},svg);
-      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',e=>moveTip(e));el.addEventListener('mouseleave',hideTip);
+      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);
     } else {
       const el=svgEl('path',{d:d.d,fill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.2',cursor:'pointer'},svg);
-      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',e=>moveTip(e));el.addEventListener('mouseleave',hideTip);
+      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);
     }
   }
+  // Region labels (manuscript style — uses module-level RLBL)
+  RLBL.forEach(([x,y,t])=>svgEl('text',{x,y,'text-anchor':'middle','font-size':'8','fill':'rgba(30,30,30,0.75)','font-weight':'600','pointer-events':'none',style:'text-shadow:0 0 3px #ecf0f1'},svg).textContent=t);
+  // Gradient legend bar (manuscript style)
+  const lgId='cg_'+Date.now();
+  const defs=svgEl('defs',{},svg);
+  const grad=svgEl('linearGradient',{id:lgId,x1:'0%',y1:'0%',x2:'100%',y2:'0%'},defs);
+  svgEl('stop',{'offset':'0%','stop-color':'rgba('+PRIMARY_RGB[0]+','+PRIMARY_RGB[1]+','+PRIMARY_RGB[2]+',0.15)'},grad);
+  svgEl('stop',{'offset':'100%','stop-color':'rgba('+PRIMARY_RGB[0]+','+PRIMARY_RGB[1]+','+PRIMARY_RGB[2]+',1)'},grad);
+  const lgX=60,lgY=672,lgW=440,lgH=10;
+  svgEl('rect',{x:lgX,y:lgY,width:lgW,height:lgH,fill:'url(#'+lgId+')',rx:3,stroke:'#ccc','stroke-width':'0.5'},svg);
+  svgEl('text',{x:lgX,y:lgY+lgH+11,'font-size':'9','fill':'#555','text-anchor':'start'},svg).textContent=mn.toFixed(1);
+  svgEl('text',{x:lgX+lgW/2,y:lgY+lgH+11,'text-anchor':'middle','font-size':'8','fill':'#888'},svg).textContent=PL;
+  svgEl('text',{x:lgX+lgW,y:lgY+lgH+11,'text-anchor':'end','font-size':'9','fill':'#555'},svg).textContent=mx.toFixed(1);
 }
 
 function renderLISA(){
   const c=document.getElementById('lPanel');c.innerHTML='';
-  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 660',style:'display:block;max-height:320px'},c);
-  svgEl('rect',{x:0,y:0,width:560,height:660,fill:'#ecf0f1'},svg);
+  let activeFilter=null;
+  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 700',style:'display:block;max-height:340px'},c);
+  svgEl('rect',{x:0,y:0,width:560,height:700,fill:'#ecf0f1'},svg);
+  const paths=[];
   for(const d of DSVG){
     const reg=d.r;
     const rd=DDATA[d.n];
     const lisaClass=rd?rd.lisa:(REGION.find(r=>r.name===reg)||{}).lisa||'NS';
     const fill=LISA_COLORS[lisaClass]||'#bdc3c7';
     const tipH='<strong>'+d.n+'</strong><br><em>'+reg+'</em><br>LISA: <strong>'+(LISA_LABELS[lisaClass]||lisaClass)+'</strong>';
+    let el;
     if(d.dot){
-      const el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'rgba(255,255,255,0.6)','stroke-width':'0.5',opacity:'0.85',cursor:'pointer'},svg);
-      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',e=>moveTip(e));el.addEventListener('mouseleave',hideTip);
+      el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'rgba(255,255,255,0.6)','stroke-width':'0.5',opacity:'0.85',cursor:'pointer'},svg);
     } else {
-      const el=svgEl('path',{d:d.d,fill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.2',opacity:'0.85',cursor:'pointer'},svg);
-      el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',e=>moveTip(e));el.addEventListener('mouseleave',hideTip);
+      el=svgEl('path',{d:d.d,fill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.2',opacity:'0.85',cursor:'pointer'},svg);
     }
+    el.dataset.lisa=lisaClass;
+    el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);
+    paths.push(el);
   }
-  // Legend
-  const lg=svgEl('g',{transform:'translate(8,590)'},svg);
-  const cls=[['HH','#c0392b'],['LL','#2980b9'],['HL','#e67e22'],['LH','#82c0e8'],['NS','#bdc3c7']];
-  cls.forEach(([lbl,col],i)=>{
-    const x=i*104;
-    svgEl('rect',{x,y:0,width:14,height:14,fill:col,rx:2},lg);
-    svgEl('text',{x:x+18,y:11,'font-size':'10','fill':'#333'},lg).textContent=lbl;
+  // Region labels (manuscript style — uses module-level RLBL)
+  RLBL.forEach(([x,y,t])=>svgEl('text',{x,y,'text-anchor':'middle','font-size':'8','fill':'rgba(30,30,30,0.75)','font-weight':'600','pointer-events':'none',style:'text-shadow:0 0 3px #ecf0f1'},svg).textContent=t);
+  // Clickable legend (filter map by LISA class)
+  const lg=svgEl('g',{transform:'translate(8,672)'},svg);
+  const cls=[['HH','#c0392b','High-High'],['LL','#2980b9','Low-Low'],['HL','#e67e22','High-Low'],['LH','#82c0e8','Low-High'],['NS','#bdc3c7','Not sig.']];
+  cls.forEach(([lbl,col,full],i)=>{
+    const x=i*106;
+    const rct=svgEl('rect',{x,y:0,width:14,height:14,fill:col,rx:2,cursor:'pointer'},lg);
+    const txt=svgEl('text',{x:x+17,y:11,'font-size':'9.5','fill':'#333',cursor:'pointer'},lg);
+    txt.textContent=lbl;
+    const toggle=()=>{
+      activeFilter=activeFilter===lbl?null:lbl;
+      paths.forEach(p=>p.style.opacity=(!activeFilter||p.dataset.lisa===activeFilter)?'0.85':'0.12');
+      cls.forEach(([lb],j)=>{const r2=lg.children[j*2];r2.style.opacity=(!activeFilter||lb===activeFilter)?'1':'0.35';});
+    };
+    rct.addEventListener('click',toggle);txt.addEventListener('click',toggle);
+    svgEl('title',{},rct).textContent='Click to filter: '+full;
   });
 }
 
@@ -184,12 +214,12 @@ function renderRegion(){
   const el=document.getElementById('regPanel');el.innerHTML='';
   hBar(el,RLB,RV,RC,RLB.map((l,i)=>l+': '+RV[i]),'ANC4+ (%)');
 }
-function renderTimeline(){
-  const el=document.getElementById('tlPanel');el.innerHTML='';
+function renderUnique(){
+  const el=document.getElementById('scPanel');if(!el)return;el.innerHTML='';
   vBar(el,TL_Y.map(String),TL_V,TL_Y.map(()=>'rgba(26,82,118,0.75)'),'Districts');
 }
 
-function renderAll(){renderChoropleth();renderLISA();renderRegion();renderTimeline();}
+function renderAll(){renderChoropleth();renderLISA();renderRegion();renderUnique();}
 requestAnimationFrame(()=>renderAll());
 let _rt;window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(renderAll,180);});
 
