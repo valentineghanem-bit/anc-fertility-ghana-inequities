@@ -66,7 +66,8 @@ td{padding:3px 6px;border-bottom:1px solid #eef}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <div>
           <p style="font-size:.7em;font-weight:600;text-align:center;margin-bottom:3px;color:#1a5276">Outcome Map</p>
-          <svg id="pmapC" viewBox="0 0 400 490" style="width:100%;max-height:220px;display:block"></svg>
+          <svg id="pmapC" viewBox="0 0 400 450" style="width:100%;max-height:220px;display:block"></svg>
+          <div id="plegC"></div>
         </div>
         <div>
           <p style="font-size:.7em;font-weight:600;text-align:center;margin-bottom:3px;color:#1a5276">LISA Clusters</p>
@@ -105,8 +106,7 @@ const PLISA_C={HH:'#c0392b',LL:'#2980b9',HL:'#e67e22',LH:'#82c0e8',NS:'#bdc3c7'}
   function mkPath(tag,attrs){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);return e;}
   const sc=document.getElementById('pmapC'),sl=document.getElementById('pmapL');
   if(!sc||!sl) return;
-  sc.appendChild(mkPath('rect',{x:0,y:0,width:400,height:490,fill:'#ecf0f1'}));
-  sl.appendChild(mkPath('rect',{x:0,y:0,width:400,height:450,fill:'#ecf0f1'}));
+  [sc,sl].forEach(s=>s.appendChild(mkPath('rect',{x:0,y:0,width:400,height:450,fill:'#ecf0f1'})));
   DSVGP.forEach(d=>{
     const rd=rMap[d.r]||{anc:0,lisa:'NS'};
     const t=mx>mn?(rd.anc-mn)/(mx-mn):0.5;
@@ -116,16 +116,16 @@ const PLISA_C={HH:'#c0392b',LL:'#2980b9',HL:'#e67e22',LH:'#82c0e8',NS:'#bdc3c7'}
     sc.appendChild(mkPath('path',{d:d.d,fill:chFill,stroke:'#fff','stroke-width':'0.4'}));
     sl.appendChild(mkPath('path',{d:d.d,fill:lisaFill,stroke:'#fff','stroke-width':'0.4',opacity:'0.85'}));
   });
-  const defs=mkPath('defs',{});
-  const grad=mkPath('linearGradient',{id:'cgp',x1:'0%',y1:'0%',x2:'100%',y2:'0%'});
-  [[0,215,25,28],[17,253,174,97],[33,255,255,191],[50,204,236,165],[67,166,217,106],[83,75,183,89],[100,26,150,65]].forEach(([op,r,g,b])=>{
-    const s=mkPath('stop',{offset:op+'%','stop-color':'rgb('+r+','+g+','+b+')'});grad.appendChild(s);
-  });
-  defs.appendChild(grad);sc.appendChild(defs);
-  sc.appendChild(mkPath('rect',{x:30,y:462,width:340,height:8,fill:'url(#cgp)',rx:2,stroke:'#ccc','stroke-width':'0.5'}));
-  const t1=mkPath('text',{x:30,y:481,'font-size':'9','fill':'#555','text-anchor':'start'});t1.textContent=mn.toFixed(1)+'%';sc.appendChild(t1);
-  const t2=mkPath('text',{x:200,y:481,'font-size':'8','fill':'#888','text-anchor':'middle'});t2.textContent='ANC4+ (%)';sc.appendChild(t2);
-  const t3=mkPath('text',{x:370,y:481,'font-size':'9','fill':'#555','text-anchor':'end'});t3.textContent=mx.toFixed(1)+'%';sc.appendChild(t3);
+  const leg=document.getElementById('plegC');
+  if(leg){
+    const stops=[0,1/6,2/6,3/6,4/6,5/6,1].map(t=>cs(t)+' '+(t*100).toFixed(0)+'%').join(',');
+    leg.style.cssText='display:flex;align-items:center;gap:4px;margin-top:4px;width:100%';
+    const lo=document.createElement('span');lo.style.cssText='font-size:.65em;color:#555;white-space:nowrap';lo.textContent=mn.toFixed(1)+'%';
+    const bar=document.createElement('div');bar.style.cssText='flex:1;height:9px;border-radius:3px;border:1px solid #ddd;background:linear-gradient(to right,'+stops+')';
+    const hi=document.createElement('span');hi.style.cssText='font-size:.65em;color:#555;white-space:nowrap';hi.textContent=mx.toFixed(1)+'%';
+    const lbl=document.createElement('span');lbl.style.cssText='font-size:.6em;color:#999;white-space:nowrap';lbl.textContent='ANC4+(%)';
+    leg.appendChild(lo);leg.appendChild(bar);leg.appendChild(hi);leg.appendChild(lbl);
+  }
 })();
 function dlSelf(fname){
   const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
