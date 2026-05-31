@@ -112,12 +112,16 @@ const PLISA_C={HH:'#c0392b',LL:'#2980b9',HL:'#e67e22',LH:'#82c0e8',NS:'#bdc3c7'}
     const chFill=cs(t);
     const lisaFill=PLISA_C[rd.lisa||'NS']||'#bdc3c7';
     if(d.dot){
-      sc.appendChild(mkPath('circle',{cx:d.cx,cy:d.cy,r:5,fill:chFill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.5'}));
-      sl.appendChild(mkPath('circle',{cx:d.cx,cy:d.cy,r:5,fill:lisaFill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.5',opacity:'0.85'}));
+      sc.appendChild(mkPath('circle',{cx:d.cx,cy:d.cy,r:5,fill:chFill,stroke:'#fff','stroke-width':'0.8'}));
+      sl.appendChild(mkPath('circle',{cx:d.cx,cy:d.cy,r:5,fill:lisaFill,stroke:'#fff','stroke-width':'0.8',opacity:'0.85'}));
     } else {
-      sc.appendChild(mkPath('path',{d:d.d,fill:chFill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.2'}));
-      sl.appendChild(mkPath('path',{d:d.d,fill:lisaFill,stroke:'rgba(255,255,255,0.5)','stroke-width':'0.2',opacity:'0.85'}));
+      sc.appendChild(mkPath('path',{d:d.d,fill:chFill,stroke:'#fff','stroke-width':'0.4'}));
+      sl.appendChild(mkPath('path',{d:d.d,fill:lisaFill,stroke:'#fff','stroke-width':'0.4',opacity:'0.85'}));
     }
+  });
+  // Region labels on both maps
+  [[389,554,'Gr.Accra'],[214,457,'Ashanti'],[274,572,'Central'],[341,504,'Eastern'],[155,598,'Western'],[476,483,'Volta'],[440,330,'Oti'],[244,347,'Bono E'],[114,431,'Ahafo'],[98,372,'Bono'],[70,494,'W.North'],[322,45,'UE'],[105,81,'UW'],[364,186,'Northern'],[220,220,'Savannah'],[357,94,'NE']].forEach(([x,y,t])=>{
+    [sc,sl].forEach(s=>{const e=document.createElementNS('http://www.w3.org/2000/svg','text');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('text-anchor','middle');e.setAttribute('font-size','8');e.setAttribute('fill','rgba(30,30,30,0.75)');e.setAttribute('font-weight','600');e.setAttribute('pointer-events','none');e.textContent=t;s.appendChild(e);});
   });
 })();
 function dlSelf(fname){
