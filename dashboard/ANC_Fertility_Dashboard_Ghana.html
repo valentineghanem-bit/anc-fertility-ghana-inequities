@@ -98,8 +98,8 @@ function renderChoropleth(){
   const c=document.getElementById('cPanel');c.innerHTML='';
   const vals=REGION.map(d=>d.anc);
   const mn=Math.min(...vals),mx=Math.max(...vals);
-  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 660',style:'display:block;max-height:320px'},c);
-  svgEl('rect',{x:0,y:0,width:560,height:660,fill:'#ecf0f1'},svg);
+  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 700',style:'display:block;max-height:340px'},c);
+  svgEl('rect',{x:0,y:0,width:560,height:700,fill:'#ecf0f1'},svg);
   for(const d of DSVG){
     const reg=d.r;
     const rd=DDATA[d.n]||REGION.find(r=>r.name===reg);
@@ -109,7 +109,7 @@ function renderChoropleth(){
     const rc=REGION.find(r=>r.name===reg)||{};
     const tipH='<strong>'+d.n+'</strong><br><em>'+reg+'</em><br>'+PL+': '+(v||'\u2013')+(rc.lisa?'<br>LISA: '+(LISA_LABELS[rc.lisa]||rc.lisa):'');
     if(d.dot){
-      const el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'#fff','stroke-width':'0.8',cursor:'pointer'},svg);
+      const el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'none',cursor:'pointer'},svg);
       el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);
     } else {
       const el=svgEl('path',{d:d.d,fill,stroke:'#fff','stroke-width':'0.4',cursor:'pointer'},svg);
@@ -117,22 +117,20 @@ function renderChoropleth(){
     }
   }
   RLBL.forEach(([x,y,t])=>svgEl('text',{x,y,'text-anchor':'middle','font-size':'8','fill':'rgba(30,30,30,0.75)','font-weight':'600','pointer-events':'none',style:'text-shadow:0 0 3px #ecf0f1'},svg).textContent=t);
-  const lgDiv=document.getElementById('legC');
-  if(lgDiv){lgDiv.innerHTML='';lgDiv.style.width='100%';
-    const lo=document.createElement('span');lo.textContent=mn.toFixed(1);lo.style.cssText='color:#555;min-width:28px;font-size:.72em';
-    const bar=document.createElement('div');
-    const stops=[0,1/6,2/6,3/6,4/6,5/6,1].map(t=>cs(t)+' '+(t*100).toFixed(0)+'%').join(',');
-    bar.style.cssText='flex:1;height:10px;border-radius:3px;border:1px solid #ddd;background:linear-gradient(to right,'+stops+')';
-    const lbl=document.createElement('span');lbl.textContent=PL;lbl.style.cssText='color:#888;font-size:.72em;padding:0 6px';
-    const hi=document.createElement('span');hi.textContent=mx.toFixed(1);hi.style.cssText='color:#555;min-width:28px;text-align:right;font-size:.72em';
-    lgDiv.appendChild(lo);lgDiv.appendChild(bar);lgDiv.appendChild(lbl);lgDiv.appendChild(hi);
-  }
+  const lgId='cg_'+Date.now();const defs=svgEl('defs',{},svg);const grad=svgEl('linearGradient',{id:lgId,x1:'0%',y1:'0%',x2:'100%',y2:'0%'},defs);
+  [0,1/6,2/6,3/6,4/6,5/6,1].forEach(t=>svgEl('stop',{offset:(t*100).toFixed(1)+'%','stop-color':cs(t)},grad));
+  const lgX=60,lgY=672,lgW=440,lgH=10;
+  svgEl('rect',{x:lgX,y:lgY,width:lgW,height:lgH,fill:'url(#'+lgId+')',rx:3,stroke:'#ccc','stroke-width':'0.5'},svg);
+  svgEl('text',{x:lgX,y:lgY+lgH+11,'font-size':'9','fill':'#555','text-anchor':'start'},svg).textContent=mn.toFixed(1);
+  svgEl('text',{x:lgX+lgW/2,y:lgY+lgH+11,'text-anchor':'middle','font-size':'8','fill':'#888'},svg).textContent=PL;
+  svgEl('text',{x:lgX+lgW,y:lgY+lgH+11,'text-anchor':'end','font-size':'9','fill':'#555'},svg).textContent=mx.toFixed(1);
+  const lgDiv=document.getElementById('legC');if(lgDiv)lgDiv.style.display='none';
 }
 
 function renderLISA(){
   const c=document.getElementById('lPanel');c.innerHTML='';
-  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 660',style:'display:block;max-height:320px'},c);
-  svgEl('rect',{x:0,y:0,width:560,height:660,fill:'#ecf0f1'},svg);
+  const svg=svgEl('svg',{width:'100%',viewBox:'0 0 560 700',style:'display:block;max-height:340px'},c);
+  svgEl('rect',{x:0,y:0,width:560,height:700,fill:'#ecf0f1'},svg);
   for(const d of DSVG){
     const reg=d.r;
     const rd=DDATA[d.n];
@@ -140,7 +138,7 @@ function renderLISA(){
     const fill=LISA_COLORS[lisaClass]||'#bdc3c7';
     const tipH='<strong>'+d.n+'</strong><br><em>'+reg+'</em><br>LISA: <strong>'+(LISA_LABELS[lisaClass]||lisaClass)+'</strong>';
     let el;
-    if(d.dot){el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'#fff','stroke-width':'0.8',opacity:'0.85',cursor:'pointer'},svg);}
+    if(d.dot){el=svgEl('circle',{cx:d.cx,cy:d.cy,r:5,fill,stroke:'none',opacity:'0.85',cursor:'pointer'},svg);}
     else{el=svgEl('path',{d:d.d,fill,stroke:'#fff','stroke-width':'0.4',opacity:'0.85',cursor:'pointer'},svg);}
     el.addEventListener('mouseenter',e=>showTip(e,tipH));el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);
   }
