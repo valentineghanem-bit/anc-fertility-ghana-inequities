@@ -208,26 +208,39 @@ GINI_D.forEach((d,i)=>{
 svgEl('line',{x1:mL,y1:mT,x2:mL,y2:mT+ch,stroke:'#ccc'},svg);
 svgEl('text',{x:12,y:mT+ch/2,'text-anchor':'middle','font-size':'9','fill':'#888',transform:'rotate(-90,12,'+(mT+ch/2)+')'},svg).textContent='Gini Index';}
 function renderPanelF(){const el=document.getElementById('pF');if(!el)return;el.innerHTML='';
-const mL=54,mR=26,mT=20,mB=50,ch=200;
+const mL=54,mR=26,mT=20,mB=38,ch=200;
 const wEl=el.getBoundingClientRect().width||500;const w=Math.max(wEl,360);const pW=w-mL-mR;
 const xs=SC_PTS.map(d=>d.x),ys=SC_PTS.map(d=>d.y);
-const xMn=Math.min(...xs)-3,xMx=Math.max(...xs)+5,yMn=0,yMx=Math.max(...ys)*1.15;
+const xMn=Math.min(...xs)-0.3,xMx=Math.max(...xs)+0.5,yMn=0,yMx=Math.max(...ys)*1.15;
 const px=v=>mL+(v-xMn)/(xMx-xMn)*pW;const py=v=>mT+ch-(v-yMn)/(yMx-yMn)*ch;
 const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' '+(mT+ch+mB),style:'display:block'},el);
 [0.25,0.5,0.75,1].forEach(t=>{const yg=mT+ch*(1-t);svgEl('line',{x1:mL,y1:yg,x2:mL+pW,y2:yg,stroke:'#e8eaf6','stroke-width':'.8'},svg);svgEl('text',{x:mL-3,y:yg+4,'text-anchor':'end','font-size':'9','fill':'#aaa'},svg).textContent=(yMx*t).toFixed(1);});
 const n=SC_PTS.length,sx=SC_PTS.reduce((a,d)=>a+d.x,0),sy=SC_PTS.reduce((a,d)=>a+d.y,0),sxy=SC_PTS.reduce((a,d)=>a+d.x*d.y,0),sx2=SC_PTS.reduce((a,d)=>a+d.x*d.x,0);
 const sl=(n*sxy-sx*sy)/(n*sx2-sx*sx)||0,ic=(sy-sl*sx)/n;
 svgEl('line',{x1:px(xMn),y1:py(sl*xMn+ic),x2:px(xMx),y2:py(sl*xMx+ic),stroke:'rgba(180,180,180,.5)','stroke-width':'2','stroke-dasharray':'6,4'},svg);
+const ABBR={'Gr.Accra':'GA','ASHANTI':'AS','CENTRAL':'CE','EASTERN':'EA','WESTERN':'WE','VOLTA':'VO','OTI':'OT','Bono E':'BE','AHAFO':'AH','BONO':'BO','W.North':'WN','UPPER EAST':'UE','UPPER WEST':'UW','NORTHERN':'NO','SAVANNAH':'SA','NE':'NE'};
+const FULL={'Gr.Accra':'Greater Accra','ASHANTI':'Ashanti','CENTRAL':'Central','EASTERN':'Eastern','WESTERN':'Western','VOLTA':'Volta','OTI':'Oti','Bono E':'Bono East','AHAFO':'Ahafo','BONO':'Bono','W.North':'W.North','UPPER EAST':'Upper East','UPPER WEST':'Upper West','NORTHERN':'Northern','SAVANNAH':'Savannah','NE':'N.East'};
 SC_PTS.forEach(d=>{
+  const ab=ABBR[d.n]||d.n.slice(0,2);
   const c=svgEl('circle',{cx:px(d.x),cy:py(d.y),r:9,fill:LISA_COLORS[d.lisa]||'#bdc3c7',stroke:'white','stroke-width':'1.2',opacity:'.9',cursor:'pointer'},svg);
-  c.addEventListener('mouseenter',e=>showTip(e,'<strong>'+d.n+'</strong><br>TFR: '+d.x+'%<br>ANC4+ (%): '+d.y));
+  c.addEventListener('mouseenter',e=>showTip(e,'<strong>'+(FULL[d.n]||d.n)+'</strong><br>TFR: '+d.x+'<br>ANC4+: '+d.y+'%'));
   c.addEventListener('mousemove',moveTip);c.addEventListener('mouseleave',hideTip);
-  svgEl('text',{x:px(d.x),y:py(d.y)-12,'text-anchor':'middle','font-size':'7.5','fill':'#555'},svg).textContent=d.n;
+  svgEl('text',{x:px(d.x),y:py(d.y)-13,'text-anchor':'middle','font-size':'9','font-weight':'600','fill':'#333'},svg).textContent=ab;
 });
 svgEl('line',{x1:mL,y1:mT,x2:mL,y2:mT+ch,stroke:'#ccc'},svg);
 svgEl('line',{x1:mL,y1:mT+ch,x2:mL+pW,y2:mT+ch,stroke:'#ccc'},svg);
-svgEl('text',{x:mL+pW/2,y:mT+ch+36,'text-anchor':'middle','font-size':'10','fill':'#666'},svg).textContent='TFR (%)';
-svgEl('text',{x:14,y:mT+ch/2,'text-anchor':'middle','font-size':'10','fill':'#666',transform:'rotate(-90,14,'+(mT+ch/2)+')'},svg).textContent='ANC4+ (%)';}
+svgEl('text',{x:mL+pW/2,y:mT+ch+26,'text-anchor':'middle','font-size':'10','fill':'#666'},svg).textContent='TFR (children per woman)';
+svgEl('text',{x:14,y:mT+ch/2,'text-anchor':'middle','font-size':'10','fill':'#666',transform:'rotate(-90,14,'+(mT+ch/2)+')'},svg).textContent='ANC4+ (%)';
+const lg=document.createElement('div');
+lg.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:3px 8px;margin-top:6px;font-size:.67em;color:#444';
+SC_PTS.forEach(d=>{
+  const ab=ABBR[d.n]||d.n.slice(0,2);const full=FULL[d.n]||d.n;
+  const item=document.createElement('span');item.style.cssText='display:flex;align-items:center;gap:3px';
+  const sw=document.createElement('span');sw.style.cssText='width:9px;height:9px;border-radius:2px;flex-shrink:0;background:'+(LISA_COLORS[d.lisa]||'#bdc3c7');
+  const tx=document.createElement('span');tx.textContent=ab+' '+full;
+  item.appendChild(sw);item.appendChild(tx);lg.appendChild(item);
+});
+el.appendChild(lg);}
 
 function renderAll(){renderChoropleth();renderLISA();renderPanelC();renderPanelD();renderPanelE();renderPanelF();}
 requestAnimationFrame(()=>renderAll());
