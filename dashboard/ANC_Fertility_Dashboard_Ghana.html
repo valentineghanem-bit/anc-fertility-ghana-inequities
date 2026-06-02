@@ -56,7 +56,7 @@ tr:hover td{background:#f8faff}
 <div class="grid">
   <div class="panel"><h3>District Choropleth — ANC4+ (%)</h3><div id="cPanel"></div><div id="legC" style="display:flex;align-items:center;gap:6px;margin-top:4px;padding:0 2px"></div></div>
   <div class="panel"><h3>LISA Spatial Clusters</h3><div id="lPanel"></div><div class="leg"><span><i style="background:#c0392b"></i>HH High-High</span><span><i style="background:#2980b9"></i>LL Low-Low</span><span><i style="background:#e67e22"></i>HL High-Low</span><span><i style="background:#82c0e8"></i>LH Low-High</span><span><i style="background:#bdc3c7"></i>NS Not sig.</span></div></div>
-  <div class="panel full"><h3>Regional ANC4+ Coverage</h3><div id="pC" style="width:100%;min-height:220px"></div></div>
+  <div class="panel full"><h3>Regional ANC4+ Coverage — Ranked by Performance</h3><div id="pC" style="width:100%;min-height:220px"></div></div>
   <div class="panel"><h3>CEI — Coverage Efficiency Index by Region</h3><div id="pD" style="width:100%;min-height:220px"></div></div>
   <div class="panel"><h3>ANC Inequality Trajectory — Gini Index</h3><div id="pE" style="width:100%;min-height:220px"></div></div>
   <div class="panel"><h3>ANC4+ vs Fertility Rate — Policy Zones</h3><div id="pF" style="width:100%;min-height:220px"></div></div>
@@ -188,8 +188,27 @@ function vBar(el,labels,vals,colors,yLabel){
 }
 
 function renderPanelC(){const el=document.getElementById('pC');if(!el)return;el.innerHTML='';
-const barCols=RL_LISA.map(l=>LISA_COLORS[l]||'#bdc3c7');
-hBar(el,RLB_C,RV_C,barCols,RLB_C.map((l,i)=>l+': '+RV_C[i]+' — LISA: '+(RL_LISA[i]||'NS')),'ANC4+ (%)');
+const RL_DATA=RLB_C.map((n,i)=>({n,v:RV_C[i],lisa:RL_LISA[i]})).sort((a,b)=>b.v-a.v);
+const mn2=Math.min(...RL_DATA.map(d=>d.v)),mx2=Math.max(...RL_DATA.map(d=>d.v));
+const mean2=RL_DATA.reduce((a,d)=>a+d.v,0)/RL_DATA.length;
+const mL=66,mR=32,mT=14,mB=28,bH=20,gap=4;
+const n=RL_DATA.length,h=mT+(bH+gap)*n+mB;
+const wEl=el.getBoundingClientRect().width||500,w=Math.max(wEl,300),pW=w-mL-mR;
+const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' '+h,style:'display:block'},el);
+RL_DATA.forEach((d,i)=>{
+  const y=mT+i*(bH+gap)+bH/2;
+  const cx=mL+((d.v-mn2)/(mx2-mn2||1))*pW;
+  svgEl('line',{x1:mL,y1:y,x2:mL+pW,y2:y,stroke:'#e8eaf6','stroke-width':'1.5'},svg);
+  const ci=svgEl('circle',{cx,cy:y,r:8,fill:LISA_COLORS[d.lisa]||'#bdc3c7',stroke:'white','stroke-width':'1.4',cursor:'pointer'},svg);
+  ci.addEventListener('mouseenter',e=>showTip(e,'<strong>'+d.n+'</strong><br>ANC4+ (%): <strong>'+d.v+'</strong><br>LISA: '+(LISA_LABELS[d.lisa]||d.lisa)));
+  ci.addEventListener('mousemove',moveTip);ci.addEventListener('mouseleave',hideTip);
+  svgEl('text',{x:mL-5,y:y+4,'text-anchor':'end','font-size':'10','fill':'#333'},svg).textContent=d.n;
+  svgEl('text',{x:cx+11,y:y+4,'font-size':'9','fill':'#555'},svg).textContent=d.v;
+});
+const mpx=mL+((mean2-mn2)/(mx2-mn2||1))*pW;
+svgEl('line',{x1:mpx,y1:mT,x2:mpx,y2:mT+(bH+gap)*n,stroke:'#e74c3c','stroke-dasharray':'5,3','stroke-width':'1.5'},svg);
+svgEl('text',{x:mpx+3,y:mT+8,'font-size':'8','fill':'#e74c3c'},svg).textContent='Mean: '+mean2.toFixed(1);
+svgEl('text',{x:mL+pW/2,y:h-4,'text-anchor':'middle','font-size':'10','fill':'#888'},svg).textContent='ANC4+ (%)';
 const lg=document.createElement('div');lg.className='leg';lg.style.marginTop='7px';
 [['HH','High-High','#c0392b'],['LL','Low-Low','#2980b9'],['HL','High-Low','#e67e22'],['LH','Low-High','#82c0e8'],['NS','Not significant','#bdc3c7']].forEach(([k,lb,c])=>{const s=document.createElement('span');s.innerHTML='<i style="background:'+c+'"></i>'+k+' '+lb;lg.appendChild(s);});
 el.appendChild(lg);}
@@ -245,14 +264,14 @@ SC_PTS.forEach(d=>{
   const ab=AB[d.n]||d.n.slice(0,2).toUpperCase(),fn=FN[d.n]||d.n;
   const cx2=px(d.x).toFixed(1),cy2=py(d.y).toFixed(1);
   const ci=svgEl('circle',{cx:cx2,cy:cy2,r:9,fill:LISA_COLORS[d.lisa]||'#bdc3c7',stroke:'white','stroke-width':'1.5',opacity:'.92',cursor:'pointer'},svg);
-  ci.addEventListener('mouseenter',e=>showTip(e,'<strong>'+fn+'</strong><br>TFR: <strong>'+d.x+'%</strong><br>ANC4+ (%): <strong>'+d.y+'</strong>'));
+  ci.addEventListener('mouseenter',e=>showTip(e,'<strong>'+fn+'</strong><br>Total Fertility Rate (children/woman): <strong>'+d.x+'</strong><br>ANC4+ Coverage (%): <strong>'+d.y+'</strong>'));
   ci.addEventListener('mousemove',moveTip);ci.addEventListener('mouseleave',hideTip);
   svgEl('text',{x:cx2,y:(parseFloat(cy2)+(LB[d.n]?21:-13)).toFixed(1),'text-anchor':'middle','font-size':'9.5','font-weight':'700','fill':'#222'},svg).textContent=ab;
 });
 svgEl('line',{x1:mL,y1:mT,x2:mL,y2:mT+ch,stroke:'#bbb'},svg);
 svgEl('line',{x1:mL,y1:mT+ch,x2:mL+pW,y2:mT+ch,stroke:'#bbb'},svg);
-svgEl('text',{x:mL+pW/2,y:mT+ch+18,'text-anchor':'middle','font-size':'10','fill':'#555'},svg).textContent='TFR (%)';
-svgEl('text',{x:12,y:mT+ch/2,'text-anchor':'middle','font-size':'10','fill':'#555',transform:'rotate(-90,12,'+(mT+ch/2)+')'},svg).textContent='ANC4+ (%)';
+svgEl('text',{x:mL+pW/2,y:mT+ch+18,'text-anchor':'middle','font-size':'10','fill':'#555'},svg).textContent='Total Fertility Rate (children/woman)';
+svgEl('text',{x:12,y:mT+ch/2,'text-anchor':'middle','font-size':'10','fill':'#555',transform:'rotate(-90,12,'+(mT+ch/2)+')'},svg).textContent='ANC4+ Coverage (%)';
 const lw=document.createElement('div');lw.style.cssText='margin-top:8px;padding:6px 8px;background:#f8faff;border-radius:6px;border:1px solid #e8eaf6';
 const lt=document.createElement('div');lt.style.cssText='font-size:.7em;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px';lt.textContent='Region Key — by LISA Cluster';lw.appendChild(lt);
 const LGS=[{key:'HH',label:'High-High',col:'#c0392b',txt:'#fff'},{key:'HL',label:'High-Low',col:'#e67e22',txt:'#fff'},{key:'LH',label:'Low-High',col:'#82c0e8',txt:'#333'},{key:'LL',label:'Low-Low',col:'#2980b9',txt:'#fff'},{key:'NS',label:'Not Sig.',col:'#bdc3c7',txt:'#333'}];
