@@ -162,7 +162,7 @@ function hBar(el,labels,vals,colors,tips,xLabel){
   const mL=148,mR=55,mT=8,mB=28,bH=22,gap=5;
   const n=labels.length;
   const h=mT+(bH+gap)*n+mB;
-  const wEl=el.getBoundingClientRect().width||500;
+  const wEl=el.offsetWidth||el.getBoundingClientRect().width||500;
   const w=Math.max(wEl,300);
   const pW=w-mL-mR;
   const mx=Math.max(...vals,0.01);
@@ -182,7 +182,7 @@ function hBar(el,labels,vals,colors,tips,xLabel){
 function vBar(el,labels,vals,colors,yLabel){
   const mL=40,mR=10,mT=12,mB=50,ch=200;
   const n=labels.length;
-  const wEl=el.getBoundingClientRect().width||500;
+  const wEl=el.offsetWidth||el.getBoundingClientRect().width||500;
   const w=Math.max(wEl,300);
   const pW=w-mL-mR;
   const bW=Math.max(12,Math.floor(pW/n)-4);
@@ -206,7 +206,7 @@ const mn2=Math.min(...RL_DATA.map(d=>d.v)),mx2=Math.max(...RL_DATA.map(d=>d.v));
 const mean2=RL_DATA.reduce((a,d)=>a+d.v,0)/RL_DATA.length;
 const mL=66,mR=32,mT=14,mB=28,bH=20,gap=4;
 const n=RL_DATA.length,h=mT+(bH+gap)*n+mB;
-const wEl=el.getBoundingClientRect().width||500,w=Math.max(wEl,300),pW=w-mL-mR;
+const wEl=el.offsetWidth||el.getBoundingClientRect().width||500,w=Math.max(wEl,300),pW=w-mL-mR;
 const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' '+h,style:'display:block'},el);
 RL_DATA.forEach((d,i)=>{
   const y=mT+i*(bH+gap)+bH/2;
@@ -230,17 +230,17 @@ const labels=CEI_PTS.map(d=>d.n),vals=CEI_PTS.map(d=>d.cei),cols=CEI_PTS.map(d=>
 hBar(el,labels,vals,cols,labels.map((l,i)=>l+': CEI '+vals[i]),'ANC4+÷TFR ratio');}
 function renderPanelE(){const el=document.getElementById('pE');if(!el)return;el.innerHTML='';
 const mL=46,mR=14,mT=18,mB=42,ch=190;
-const wEl=el.getBoundingClientRect().width||400;const w=Math.max(wEl,300);const pW=w-mL-mR;
+const wEl=el.offsetWidth||el.getBoundingClientRect().width||400;const w=Math.max(wEl,300);const pW=w-mL-mR;
 const yMn=0,yMx=0.16,n=GINI_D.length;
 const px=(i)=>mL+(i/(n-1))*pW;const py=v=>mT+ch-(v-yMn)/(yMx-yMn)*ch;
 const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' '+(mT+ch+mB),style:'display:block'},el);
 [0,0.05,0.10,0.15].forEach(g=>{const yg=py(g);svgEl('line',{x1:mL,y1:yg,x2:mL+pW,y2:yg,stroke:'#eee','stroke-width':'1'},svg);svgEl('text',{x:mL-3,y:yg+4,'text-anchor':'end','font-size':'9','fill':'#aaa'},svg).textContent=g.toFixed(2);});
 let pts='';GINI_D.forEach((d,i)=>{pts+=(i?'L':'M')+px(i).toFixed(1)+','+py(d.g).toFixed(1);});
 const areaPath=pts+'L'+px(n-1)+','+(mT+ch)+'L'+px(0)+','+(mT+ch)+'Z';
-svgEl('path',{d:areaPath,fill:'rgba('+[rv,gv,bv].join(',')+',0.12)','stroke-width':'0'},svg);
-svgEl('path',{d:pts,fill:'none',stroke:'rgb('+[rv,gv,bv].join(',')+')', 'stroke-width':'2.5'},svg);
+svgEl('path',{d:areaPath,fill:'rgba(26,82,118,0.12)','stroke-width':'0'},svg);
+svgEl('path',{d:pts,fill:'none',stroke:'rgb(26,82,118)', 'stroke-width':'2.5'},svg);
 GINI_D.forEach((d,i)=>{
-  const c=svgEl('circle',{cx:px(i),cy:py(d.g),r:4,fill:'rgb('+[rv,gv,bv].join(',')+')',stroke:'white','stroke-width':'1.5',cursor:'pointer'},svg);
+  const c=svgEl('circle',{cx:px(i),cy:py(d.g),r:4,fill:'rgb(26,82,118)',stroke:'white','stroke-width':'1.5',cursor:'pointer'},svg);
   c.addEventListener('mouseenter',e=>showTip(e,'<strong>'+d.y+'</strong><br>Gini: '+d.g.toFixed(3)));
   c.addEventListener('mousemove',moveTip);c.addEventListener('mouseleave',hideTip);
   svgEl('text',{x:px(i),y:mT+ch+14,'text-anchor':'middle','font-size':'8.5','fill':'#666',transform:'rotate(-45,'+px(i)+','+(mT+ch+14)+')'},svg).textContent=d.y;
@@ -257,7 +257,7 @@ const FN={'Gr.Accra':'Gr. Accra','Ashanti':'Ashanti','Central':'Central','Easter
   'UW':'Upper West','Northern':'Northern','Savannah':'Savannah','NE':'N. East'};
 const LB={'Western':1,'Ahafo':1,'Oti':1,'W.North':1};
 const mL=58,mR=26,mT=24,mB=32,ch=182;
-const wEl=el.getBoundingClientRect().width||500,w=Math.max(wEl,340),pW=w-mL-mR;
+const wEl=el.offsetWidth||el.getBoundingClientRect().width||500,w=Math.max(wEl,340),pW=w-mL-mR;
 const xs=SC_PTS.map(d=>d.x),ys=SC_PTS.map(d=>d.y);
 const xR=Math.max(...xs)-Math.min(...xs)||1,yR=Math.max(...ys)-Math.min(...ys)||1;
 const xMn=Math.min(...xs)-xR*0.08,xMx=Math.max(...xs)+xR*0.1;
