@@ -7,7 +7,7 @@
 **Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana
 **Reporting standard:** STROBE
 **Date:** April 2026
-**Status:** Manuscript in preparation | Part II of Ghana ANC longitudinal series
+**Status:** Manuscript in preparation | Part I of Ghana ANC longitudinal series
 
 ---
 
