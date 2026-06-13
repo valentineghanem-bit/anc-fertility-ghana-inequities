@@ -1,25 +1,7 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ANC × Fertility, Ghana — Interactive BI Dashboard</title>
-<script>/*echarts5-inline*/
-/*
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+<title>Health Information / Epidemiology Intelligence Dashboard (HI-EI Dashboard)</title>
+<script>/*viz*/
 
 !function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"function"==typeof define&&define.amd?define(["exports"],e):e((t="undefined"!=typeof globalThis?globalThis:t||self).echarts={})}(this,(function(t){"use strict";
 /*! *****************************************************************************
@@ -105,12 +87,26 @@ input[type=range]{width:160px;accent-color:var(--primary);cursor:pointer}
 .span3{grid-column:span 3}.span4{grid-column:span 4}.span5{grid-column:span 5}.span6{grid-column:span 6}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
 .foot{margin-top:20px;font-size:.7rem;color:var(--muted);line-height:1.5}
 .tag{display:inline-block;background:rgba(255,255,255,.2);font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:20px;vertical-align:middle}
-@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.span3,.span4,.span5,.span6,.span7,.span8{grid-column:span 12}}
+.brand{font-size:.72rem;font-weight:800;letter-spacing:.04em;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:20px;white-space:nowrap;align-self:center}
+.mapcard{position:relative}
+.chart.map{height:440px}
+.zoomctl{position:absolute;top:44px;right:20px;display:flex;flex-direction:column;gap:5px;z-index:6}
+.zoomctl button{width:28px;height:28px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:7px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);line-height:1;display:flex;align-items:center;justify-content:center}
+.zoomctl button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.maplegend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.66rem;color:var(--muted);margin:6px 2px 2px;min-height:18px}
+.maplegend .lgbar{flex:1;min-width:90px;height:10px;border-radius:5px;border:1px solid var(--line)}
+.maplegend .lglab{font-weight:700;color:var(--ink)}
+.maplegend .lgttl{font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-left:2px}
+.maplegend .lgitem{display:inline-flex;align-items:center;gap:4px}
+.maplegend .lgitem em{font-style:normal;opacity:.7}
+.maplegend .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.span3,.span4,.span5,.span6,.span7,.span8{grid-column:span 12}.chart.map{height:380px}}
 </style></head><body><div class="wrap">
 
 <header class="top">
- <div><h1>Antenatal Care Coverage &amp; Fertility Inequities — Ghana <span class="tag">Part I · ECharts BI</span></h1>
+ <div><h1>Antenatal Care Coverage &amp; Fertility Inequities — Ghana <span class="tag">Part I</span></h1>
   <div class="meta">Subnational ecological study · 16 regions · DHS 1988–2022 · V. Ghanem (ORCID 0009-0002-8332-0220)</div></div>
+ <div class="brand">HI-EI Dashboard</div>
 </header>
 
 <div class="toolbar">
@@ -133,8 +129,8 @@ input[type=range]{width:160px;accent-color:var(--primary);cursor:pointer}
 <div class="kpis" id="kpis"></div>
 
 <div class="grid">
- <div class="card span6"><h3 id="mapTitle">ANC coverage by district</h3><p class="cap">Districts coloured by regional metric · click a district to filter · threshold marks regions below the line.</p><div class="chart" id="mapAnc"></div></div>
- <div class="card span6"><h3>Spatial cluster typology (LISA)</h3><p class="cap">Local Moran's I clusters · click to filter.</p><div class="chart" id="mapLisa"></div></div>
+ <div class="card span6 mapcard"><h3 id="mapTitle">ANC coverage by district</h3><p class="cap">Districts coloured by regional metric · scroll/drag to zoom &amp; pan · click a district to filter.</p><div class="zoomctl"><button type="button" id="zPlusA" title="Zoom in">+</button><button type="button" id="zMinusA" title="Zoom out">−</button><button type="button" id="zResetA" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapAnc"></div><div class="maplegend" id="legAnc"></div></div>
+ <div class="card span6 mapcard"><h3>Spatial cluster typology (LISA)</h3><p class="cap">Local Moran's I clusters · scroll/drag to zoom &amp; pan · click to filter.</p><div class="zoomctl"><button type="button" id="zPlusL" title="Zoom in">+</button><button type="button" id="zMinusL" title="Zoom out">−</button><button type="button" id="zResetL" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapLisa"></div><div class="maplegend" id="legLisa"></div></div>
  <div class="card span5"><h3 id="rankTitle">Regional ranking</h3><p class="cap">Colour = LISA cluster · dashed line = ANC threshold · click a bar to filter.</p><div class="chart" id="barRank"></div></div>
  <div class="card span4"><h3>ANC vs. Total Fertility Rate</h3><p class="cap">Regression + critical TFR 5.90 · gold ★ = what-if prediction.</p><div class="chart" id="scatter"></div></div>
  <div class="card span3"><h3>Regional profile</h3><p class="cap">Focused region vs. national mean.</p><div class="chart" id="radar"></div></div>
@@ -145,7 +141,7 @@ input[type=range]{width:160px;accent-color:var(--primary);cursor:pointer}
  <div class="card span5"><h3>Multivariate region profiles</h3><p class="cap">Parallel coordinates · drag on an axis to brush.</p><div class="chart" id="parallel"></div></div>
 </div>
 
-<div class="foot"><b>Engine:</b> Apache ECharts 5 (single self-contained HTML). Smart controls: metric switch, cluster toggles, focus filter, sort, ANC-threshold slider, what-if TFR predictor (OLS), year scrubber, live summary, CSV/PNG/self-download. Data: published regional values (ANC ecological study, Part I); 1988–2022 trend uses documented endpoints with indicative intermediate waves.</div>
+<div class="foot">Interactive single-file HI-EI dashboard — works offline. Smart controls: metric switch, cluster toggles, focus filter, sort, ANC-threshold slider, what-if TFR predictor (OLS), year scrubber, zoomable maps, live summary, CSV/PNG/self-download. Data: published regional values (ANC ecological study, Part I); 1988–2022 trend uses documented endpoints with indicative intermediate waves.</div>
 </div>
 
 <script>
@@ -171,7 +167,7 @@ function ols(){var xs=R.map(function(d){return d.tfr;}),ys=R.map(function(d){ret
  var mx=xs.reduce(function(a,b){return a+b;})/n,my=ys.reduce(function(a,b){return a+b;})/n,num=0,den=0;
  for(var i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)*(xs[i]-mx);}var b=num/den;return{b:b,a:my-b*mx};}
 
-var charts={};
+var charts={};var mapZoom={mapAnc:1,mapLisa:1};
 echarts.registerMap('ghana',GEO);
 function tb(){return {feature:{saveAsImage:{title:'PNG',pixelRatio:2,iconStyle:{borderColor:ax()}}},right:6,top:2};}
 
@@ -197,7 +193,7 @@ function renderSummary(){
 
 // ---- chart builders ----
 function mapOption(which){
- var metric = which==='lisa'?null:S.metric;
+ var metric = which==='lisa'?null:S.metric;var mid=which==='lisa'?'mapLisa':'mapAnc';
  var data=GEO.features.map(function(f){var reg=f.properties.region,d=byName[reg]||{};
   var below = metric==='anc' && d.anc!=null && d.anc<S.thr;
   return {name:f.properties.name,region:reg,
@@ -207,7 +203,7 @@ function mapOption(which){
  });
  return {tooltip:{trigger:'item',formatter:function(p){var d=byName[p.data&&p.data.region]||{};
    return '<b>'+p.name+'</b><br/>'+(p.data?p.data.region:'')+'<br/>ANC '+(d.anc!=null?d.anc+'%':'–')+' · CEI '+(d.cei!=null?d.cei:'–')+' · TFR '+(d.tfr!=null?d.tfr:'–')+' · '+(d.lisa||'–');}},
-  series:[{type:'map',map:'ghana',roam:false,aspectScale:1,data:data,label:{show:false},emphasis:{itemStyle:{areaColor:'#f1c40f'},label:{show:false}},select:{disabled:true}}]};
+  series:[{type:'map',map:'ghana',roam:true,aspectScale:1,zoom:mapZoom[mid]||1,scaleLimit:{min:1,max:12},data:data,label:{show:false},emphasis:{itemStyle:{areaColor:'#f1c40f'},label:{show:false}},select:{disabled:true}}]};
 }
 function sortRegions(){var m=S.metric;var a=R.slice();
  if(S.sort==='alpha')a.sort(function(x,y){return x.short.localeCompare(y.short);});
@@ -294,6 +290,14 @@ function radarOption(){
   series:[{type:'radar',data:ser}]};
 }
 
+function zoomMap(id,factor){if(factor==='reset'){mapZoom[id]=1;get(id).setOption(id==='mapLisa'?mapOption('lisa'):mapOption('anc'),true);return;}
+ var c=charts[id];if(!c)return;var z=mapZoom[id]||1;try{z=c.getOption().series[0].zoom||z;}catch(e){}
+ mapZoom[id]=Math.max(1,Math.min(12,z*factor));c.setOption({series:[{zoom:mapZoom[id]}]});}
+function gradLegend(){var el=document.getElementById('legAnc');if(!el)return;var m=S.metric,r=mrange(m),M=METRICS[m],stops=[],dp=(r[1]-r[0]>20?0:1);
+ for(var i=0;i<=12;i++){var t=i/12;stops.push(cs(M.rev?1-t:t));}
+ el.innerHTML='<span class="lgttl">'+M.label+'</span><span class="lglab">'+r[0].toFixed(dp)+M.unit+'</span><span class="lgbar" style="background:linear-gradient(90deg,'+stops.join(',')+')"></span><span class="lglab">'+r[1].toFixed(dp)+M.unit+'</span>';}
+function lisaLegend(){var el=document.getElementById('legLisa');if(!el)return;
+ el.innerHTML='<span class="lgttl">LISA cluster</span>'+['HH','LL','HL','LH','NS'].map(function(k){return'<span class="lgitem"><span class="sw" style="background:'+LISA[k]+'"></span>'+k+' <em>'+LISA_NAME[k]+'</em></span>';}).join('');}
 var CHARTS=[['mapAnc',function(){return mapOption('anc');}],['mapLisa',function(){return mapOption('lisa');}],['barRank',barRankOption],['scatter',scatterOption],['radar',radarOption],['lollipop',lollipopOption],['heatmap',heatmapOption],['treemap',treemapOption],['trend',trendOption],['parallel',parallelOption]];
 function get(id){if(!charts[id]){charts[id]=echarts.init(document.getElementById(id),null,{renderer:'canvas'});
   if(id==='mapAnc'||id==='mapLisa')charts[id].on('click',function(p){var r=regionFromMap(p.name);if(r)setFocus(r===S.focus?'':r);});
@@ -301,7 +305,7 @@ function get(id){if(!charts[id]){charts[id]=echarts.init(document.getElementById
  return charts[id];}
 function renderAll(){CHARTS.forEach(function(c){get(c[0]).setOption(c[1](),true);});renderSummary();
  document.getElementById('mapTitle').textContent=METRICS[S.metric].label+' by district';
- document.getElementById('rankTitle').textContent='Regional ranking — '+METRICS[S.metric].label;}
+ document.getElementById('rankTitle').textContent='Regional ranking — '+METRICS[S.metric].label;gradLegend();}
 function renderOne(id){get(id).setOption(({mapAnc:function(){return mapOption('anc');},barRank:barRankOption,scatter:scatterOption,trend:trendOption})[id](),true);}
 
 function setFocus(name){S.focus=name||'';document.getElementById('regionSel').value=S.focus;renderAll();}
@@ -333,6 +337,13 @@ document.getElementById('csvBtn').onclick=function(){var act=R.filter(active);
  dl(new Blob([csv],{type:'text/csv'}),'anc_regions_filtered.csv');};
 document.getElementById('dlBtn').onclick=function(){dl(new Blob(['<!DOCTYPE html>\n'+document.documentElement.outerHTML],{type:'text/html'}),'anc_echarts_dashboard.html');};
 function dl(blob,fn){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href);},120);}
+document.getElementById('zPlusA').onclick=function(){zoomMap('mapAnc',1.5);};
+document.getElementById('zMinusA').onclick=function(){zoomMap('mapAnc',0.6667);};
+document.getElementById('zResetA').onclick=function(){zoomMap('mapAnc','reset');};
+document.getElementById('zPlusL').onclick=function(){zoomMap('mapLisa',1.5);};
+document.getElementById('zMinusL').onclick=function(){zoomMap('mapLisa',0.6667);};
+document.getElementById('zResetL').onclick=function(){zoomMap('mapLisa','reset');};
+lisaLegend();
 
 renderAll();
 wfOut.innerHTML='predicted ANC ≈ <b>'+(function(){var o=ols();return (o.a+o.b*S.wf).toFixed(1);})()+'%</b>';
