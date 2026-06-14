@@ -283,9 +283,10 @@ function parallelOption(){
 function radarOption(){
  var mean={anc:0,cei:0,tfr:0};R.forEach(function(d){mean.anc+=d.anc;mean.cei+=d.cei;mean.tfr+=d.tfr;});mean.anc/=16;mean.cei/=16;mean.tfr/=16;
  var tgt=S.focus?byName[S.focus]:null;
- var ser=[{name:'National mean',value:[mean.anc,mean.cei,7-mean.tfr],lineStyle:{color:ax(),width:1.5,type:'dashed'},areaStyle:{opacity:.05}}];
+ var NAT=theme()==='dark'?'#9fb0c2':'#566677';
+ var ser=[{name:'National mean',value:[mean.anc,mean.cei,7-mean.tfr],lineStyle:{color:NAT,width:2,type:'dashed'},areaStyle:{color:NAT,opacity:.06},itemStyle:{color:NAT}}];
  if(tgt)ser.unshift({name:tgt.short,value:[tgt.anc,tgt.cei,7-tgt.tfr],lineStyle:{color:LISA[tgt.lisa],width:2.5},areaStyle:{color:LISA[tgt.lisa],opacity:.18},itemStyle:{color:LISA[tgt.lisa]}});
- return {tooltip:{},legend:{bottom:0,textStyle:{color:ax(),fontSize:10}},
+ return {tooltip:{},legend:{bottom:0,icon:'roundRect',itemWidth:14,itemHeight:9,textStyle:{color:ax(),fontSize:10},inactiveColor:theme()==='dark'?'#39434f':'#cdd5de'},
   radar:{indicator:[{name:'ANC %',max:100},{name:'CEI',max:36},{name:'Fertility control (7−TFR)',max:5}],radius:'60%',center:['50%','46%'],axisName:{color:ax(),fontSize:9},splitLine:{lineStyle:{color:gl()}},splitArea:{show:false},axisLine:{lineStyle:{color:gl()}}},
   series:[{type:'radar',data:ser}]};
 }
