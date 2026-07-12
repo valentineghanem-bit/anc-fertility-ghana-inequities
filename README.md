@@ -35,6 +35,7 @@ A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care 
 | Decision Tree (CART) | scikit-learn | Interpretable benchmark comparator |
 | Care Efficiency Index (CEI) | Custom (ANC% / TFR) | Novel composite performance indicator |
 | Risk stratification | Custom (z-score quadrant) | Policy zone classification |
+| Sensitivity analyses | statsmodels / scipy | Risk-zone robustness, ANC-TFR association checks, CEI gap stress-test |
 | Mixed-effects models | lme4 (R) | Regional longitudinal trend decomposition |
 | Choropleth maps | GeoPandas + Plotly | Temporal spatial visualisation |
 
@@ -115,6 +116,12 @@ pip install -r requirements.txt
 python analysis/analysis_pipeline.py --all
 ```
 
+Run the S+ sensitivity analyses:
+
+```bash
+python analysis/splus_sensitivity_analysis.py
+```
+
 ### 7.4 Run the test suite
 
 ```bash
@@ -146,9 +153,12 @@ xdg-open dashboard/ANC_Fertility_Dashboard_Ghana.html
 | Output | Description |
 |--------|-------------|
 | `data/processed/` | Cleaned master CSV, spatial weights, model outputs |
+| `outputs/sensitivity/` | S+ sensitivity analyses for risk zones, ANC-TFR robustness, fixed effects/GEE, and CEI gap |
 | `figures/` | Publication-quality PNG figures (300 DPI) |
 | `dashboard/` | Self-contained interactive HTML dashboard |
 | `poster/` | A0 conference poster (HTML, print-ready) |
+| `docs/STROBE_CHECKLIST_MAPPING.md` | Tabulated STROBE checklist mapping |
+| `docs/PLOS_GUIDELINE_ALIGNMENT_2026-07-12.md` | PLOS submission-readiness audit |
 
 ## 8a. Downloadable Artefacts (HTML)
 
@@ -166,6 +176,8 @@ Both the interactive dashboard and the conference poster are committed as self-c
 ## 9. Reporting Standard
 
 This study follows the **STROBE** (Strengthening the Reporting of Observational Studies in Epidemiology) reporting guideline for observational ecological studies.
+
+A tabulated STROBE mapping is provided in [`docs/STROBE_CHECKLIST_MAPPING.md`](docs/STROBE_CHECKLIST_MAPPING.md). The S+ sensitivity report is provided in [`outputs/sensitivity/SPLUS_SENSITIVITY_ANALYSIS_2026-07-12.md`](outputs/sensitivity/SPLUS_SENSITIVITY_ANALYSIS_2026-07-12.md).
 
 ---
 
