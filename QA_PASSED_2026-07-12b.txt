@@ -1,4 +1,4 @@
-QA PASSED — Project 1: ANC & Fertility Inequities in Ghana (Part I)
+QA PASSED — Project 1: ANC & Fertility Inequities in Ghana
 Date: 2026-07-12 (second pass, same day) — Second Full 5-Advisor Epid Council
 Supersedes: QA_PASSED_2026-04-30.txt AND QA_PASSED_2026-07-12.txt (both stale —
 the first 2026-07-12 badge predated a concurrent-session manuscript rewrite that

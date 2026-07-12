@@ -51,12 +51,12 @@ reg_map = {'..Northeast':'North East','Ahafo':'Ahafo','Ashanti':'Ashanti',
  'Bono':'Bono','Central':'Central','Eastern':'Eastern','Greater Accra':'Greater Accra',
  'Northern':'Northern','Oti':'Oti','Savannah':'Savannah','Upper East':'Upper East',
  'Upper West':'Upper West','Volta':'Volta','Western':'Western',
- 'Bono East':'Bono East','Western North':'Western North'}
+ 'Bono East':'Bono','Western North':'Western'}
 panel['Region_std'] = panel['Region'].map(reg_map).fillna(panel['Region'])
 
 north_regions = ['Northern','Upper East','Upper West','North East','Savannah']
 south_regions = ['Greater Accra','Central','Western','Eastern']
-mid_regions = ['Ashanti','Ahafo','Bono','Bono East','Western North']
+mid_regions = ['Ashanti','Ahafo','Bono']
 
 # ══════════════════════════════════════════════════════════════════════════════
 # FIGURE 2 — ANC Trajectories (fix: faint text, legend, caption)

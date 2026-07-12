@@ -361,7 +361,7 @@ NAVBAR = dbc.Navbar(
  dbc.Row([
  dbc.Col(html.Div([
  html.Span('🇬🇭', style={'fontSize': '1.4rem', 'marginRight': '8px'}),
- html.Span('Ghana ANC & Fertility Spatial Analysis — Part II (1988–2022)',
+ html.Span('Ghana ANC & Fertility Spatial Analysis (1988–2022)',
  style={'fontWeight': 'bold', 'fontSize': '1rem', 'color': 'white'}),
  ])),
  dbc.Col(html.Small('V. Ghanem | Ghana DHS subnational data',

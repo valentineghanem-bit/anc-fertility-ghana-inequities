@@ -59,8 +59,8 @@ panel['Risk_Zone'] = panel.apply(risk_zone, axis=1)
 
 # ── 5. Geographic zone classification ──────────────────────────────────────
 NORTHERN = ['North East','Northern','Savannah','Upper East','Upper West','Oti']
-MIDDLE = ['Ashanti','Brong-Ahafo','Bono','Ahafo','Bono East']
-SOUTHERN = ['Greater Accra','Central','Eastern','Western','Volta','Western North']
+MIDDLE = ['Ashanti','Brong-Ahafo','Bono','Ahafo']
+SOUTHERN = ['Greater Accra','Central','Eastern','Western','Volta']
 
 def geo_zone(r):
  if r in NORTHERN: return 'Northern Belt'

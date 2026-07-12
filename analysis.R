@@ -1,4 +1,4 @@
-# analysis.R — ANC Fertility Spatial Analysis Ghana (Part II)
+# analysis.R — ANC Fertility Spatial Analysis Ghana
 # Mixed-effects models + Gini decomposition + temporal spatial clustering
 # Author: Valentine Golden Ghanem | ORCID: 0009-0002-8332-0220
 # Usage: Rscript analysis.R

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tests/test_anc_part1.py - Ghana ANC Fertility Part I Analysis
+tests/test_anc_part1.py - Ghana ANC Fertility Analysis
 Unit tests with canonical value assertions (QA-verified April 2026).
 
 Run: pytest tests/ -v

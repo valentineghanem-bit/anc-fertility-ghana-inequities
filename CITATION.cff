@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: "Ghana ANC and Fertility Inequities — Part I: Subnational Ecological Study (1988-2022)"
+title: "Ghana ANC and Fertility Inequities: Subnational Ecological Study (1988-2022)"
 abstract: >
  Reproducible analysis pipeline for a 34-year subnational ecological study of
  antenatal care coverage and total fertility rate across Ghana's administrative
@@ -36,4 +36,4 @@ references:
  - family-names: Ghanem
  given-names: Valentine Golden
  year: 2026
- notes: "Submitted for publication. Part I of a two-part series."
+ notes: "Submitted for publication."

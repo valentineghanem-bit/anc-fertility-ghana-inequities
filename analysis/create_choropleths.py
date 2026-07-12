@@ -74,7 +74,7 @@ reg_map = {
  'Volta':'Volta','Western':'Western'
 }
 
-# ── Build Voronoi GeoDataFrame for 16 regions ─────────────────────────────
+# ── Build display Voronoi GeoDataFrame; analytic values remain DHS-harmonized ─
 def build_voronoi_gdf(centroids_df, boundary_poly):
  pts_lon = centroids_df['lon'].values
  pts_lat = centroids_df['lat'].values

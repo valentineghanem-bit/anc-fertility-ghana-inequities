@@ -1,5 +1,5 @@
 """
-ANC Coverage & Fertility Inequities, Ghana (Part I) — interactive analytics app.
+ANC Coverage & Fertility Inequities, Ghana — interactive analytics app.
 Run:  pip install streamlit plotly pandas    &&    streamlit run app.py
 Data: published regional values from the ANC ecological study (DHS 1988-2022).
 Engine: Streamlit + Plotly  |  Colourblind-safe RdYlBu  |  self-contained, works offline.
@@ -46,7 +46,7 @@ def load_geo():
 
 # ---------------- sidebar / filter ----------------
 st.sidebar.title("ANC × Fertility — Ghana")
-st.sidebar.caption("Subnational ecological study · DHS 1988–2022 · Part I")
+st.sidebar.caption("Subnational ecological study · DHS 1988–2022")
 lisa_pick = st.sidebar.multiselect("Filter by spatial cluster (LISA)", sorted(df.lisa.unique()), default=list(df.lisa.unique()))
 region_pick = st.sidebar.multiselect("Filter by region", df.region.tolist(), default=df.region.tolist())
 metric = st.sidebar.radio("Map metric", ["ANC coverage (%)", "Care Efficiency Index"], index=0)
