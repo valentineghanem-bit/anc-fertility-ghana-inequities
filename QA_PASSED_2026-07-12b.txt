@@ -1,0 +1,93 @@
+QA PASSED — Project 1: ANC & Fertility Inequities in Ghana (Part I)
+Date: 2026-07-12 (second pass, same day) — Second Full 5-Advisor Epid Council
+Supersedes: QA_PASSED_2026-04-30.txt AND QA_PASSED_2026-07-12.txt (both stale —
+the first 2026-07-12 badge predated a concurrent-session manuscript rewrite that
+recomputed the risk-stratification finding from 55/90 (61%) Critical to 23/92
+(25%) Critical, a materially different headline number, not just a precision fix)
+
+5-Deliverable Check:
+
+ Manuscript PASS  manuscript/ANC_Fertility_Ghana_Article_FINAL.docx
+   TWO council passes today. Pass 1 (documented in QA_PASSED_2026-07-12.txt):
+   8 verified defects, 7 fixed directly (leaked journal table, p-value math,
+   Table 5/6 swap, orphaned Figure 4, orphaned refs [27]/[30], causal-language
+   overclaims, Conclusions/Limitations contradiction). A concurrent session then
+   independently reconciled the manuscript to the corrected dataset (n=92, 14
+   harmonized regions, CEI=31.9/14.5, risk-stratification recomputed to 23/92
+   25% Critical) — verified and closed 4 residual gaps this created (Table 4/6
+   Discussion cross-refs, 2 refs re-orphaned by the rewrite: [26] Plotly, [30]
+   Ronsmans & Graham — both resolved by citation, not deletion).
+   Pass 2 (this session, user-requested re-initiation): found the entire
+   risk-stratification analysis — one of 4 stated study Objectives, with its
+   own Methods §2.7, Table 5, Figure 8 — was never discussed anywhere in
+   Discussion (4.1-4.6), despite Results faithfully reporting the corrected
+   23/92 (25%) finding. 5-advisor council unanimous: real defect, not
+   defensible omission — STROBE requires every stated Objective to get an
+   interpretive close, and going silent immediately after a 61%->25% downward
+   revision reads as selective reporting to any reviewer. Two advisors
+   independently surfaced a genuine methodological concern: the z-score risk
+   baseline pools 4 single-observation (2022-only) regions against 10 regions
+   with 8-9 waves of 34-year trend — not a statistically exchangeable
+   reference distribution.
+   FIXED: new Discussion §4.5 "Risk-Zone Stratification as a Spatial Targeting
+   Tool" interpreting the corrected finding and citing Table 5/Figure 8;
+   subsequent sections renumbered 4.6/4.7 with cross-refs fixed; z-score
+   exchangeability caveat added to Limitations (§4.7) as a disclosed,
+   unresolved item — NOT silently absorbed, and NOT fabricated a fix for
+   (would require the original analysis pipeline, not available in this repo).
+   Post-edit validation: all 30 references cited (zero orphans), Table 5/
+   Figure 8 now cited in Discussion, section numbering 4.1-4.7 clean and
+   sequential, paragraph count 208->210 consistent with the insertion,
+   table count unchanged at 6, docx opens and parses without error.
+   Original (pre-both-passes) backed up:
+   _archive/ANC_Fertility_Ghana_Article_FINAL_preCouncil_2026-07-12.docx
+   Outstanding (documented, not blocking): full Vancouver ascending-citation
+   renumbering; manuscript header word count ("7,500") now understated by
+   ~200 words added across both passes — cosmetic, not corrected this pass.
+
+ Poster PASS  poster/ANC_Fertility_Poster_Ghana.html — unchanged this session,
+   still current HI-EI/bespoke_v5, values consistent with corrected manuscript
+   (p=0.001, CEI mean 20.7, n=92, 14 harmonized regions). CI green.
+
+ Dashboard PASS  github_repo/dashboard/ANC_Fertility_Dashboard_Ghana.html —
+   unchanged this session, same standard, same corrected values, CI green.
+
+ Master CSV PASS  github_repo/outputs/data/Ghana_ANC_Fertility_Analysis_Dataset_FINAL.csv
+   Unchanged since 2026-04-13; source of truth for both council passes' numeric
+   verification (92 rows, 14 regions, confirmed against Table 2's own N-Regions
+   column summing to 92, and against every recomputed CEI/risk-zone value).
+
+ GitHub Repo PASS  github_repo/ (origin/main @ 62c09ab, CI completed/success)
+   No repo file changes this session (manuscript lives outside git per policy).
+
+Canonical Values Verified (CORRECTED from the 2026-04-30 and first 2026-07-12
+badges — do not reuse the old numbers below):
+ National ANC 1988->2022: 83.1%->97.7% (unchanged)
+ Gini ANC 1988->2022: 0.070->0.009 (-87.5%) (unchanged)
+ Moran's I (TFR 2022): 0.570 (p=0.001) (unchanged from first pass correction)
+ Moran's I (ANC 2022): -0.107 (dissipated, p=0.496) (unchanged)
+ Exploratory TFR inflection (RF PDP): 5.90, framed as hypothesis-generating
+ RF CV R2 (5-fold): 0.203 | RMSE: 5.22% (unchanged)
+ CEI: Greater Accra 31.9 (was 30.8) | North East 14.5 (was 14.3) | gap 2.2x (unchanged rounding)
+ Risk zones (CORRECTED, materially different from prior badges):
+   Critical=23/92 (25.0%) [was: 55/90, 61.1% -- do not reuse]
+   Resilient=45/92 (48.9%) [was: 27/90, 30.0%]
+   Workhorse=18/92 (19.6%) | Emerging=6/92 (6.5%)
+ Total analytical sample: n=92 region-year observations [was: n=90]
+ Regional units: 14 harmonized DHS regional analytic units [was: "16 regions" --
+   now explicitly disclosed as a display-geometry vs analytic-unit distinction]
+
+Council Findings Requiring Post-Publication Follow-up (logged to
+AIPOCH_Learning_Log.md, not submission-blocking):
+ - Full Vancouver in-text citation renumbering (ascending by first appearance)
+ - z-score risk-stratification baseline exchangeability (single-wave vs
+   multi-wave regions pooled into one grand mean/SD) -- disclosed in
+   Limitations §4.7, sensitivity analysis recommended but not run
+ - Repeated-measures/non-independence across the region-year panel not
+   addressed with clustered SEs or mixed-effects specification
+ - No multiplicity correction across the stacked spatial/ML significance tests
+ - No uncertainty band around the TFR=5.90 point estimate
+ - Manuscript header word count field is now stale (understated)
+
+Overall QA Verdict: QA PASSED
+/disseminate: UNLOCKED
