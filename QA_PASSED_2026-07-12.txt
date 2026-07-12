@@ -1,0 +1,80 @@
+QA PASSED — Project 1: ANC & Fertility Inequities in Ghana (Part I)
+Date: 2026-07-12 — Full 5-Advisor Epid Council + Pre-Publication QA Gate
+Supersedes: QA_PASSED_2026-04-30.txt (stale — predated the 2026-06-10 to 2026-06-15
+dashboard/poster/README rewrite and the 2026-07-12 manuscript council pass)
+
+5-Deliverable Check:
+ Manuscript PASS  manuscript/ANC_Fertility_Ghana_Article_FINAL.docx
+   Full 5-advisor council (Synthesis Lead, Scite Skeptic, Spatial & ML Auditor,
+   Urban Health Contextualist, Clinical Implementer) + anonymous peer review ran
+   on the Discussion section's 4 principal claims. Technical QA sweep found 8
+   verified defects; 7 fixed directly in this pass (leaked internal journal-shortlist
+   table removed; 4x "p<0.001" corrected to "p=0.001" — mathematically impossible
+   under the study's own 999-permutation method; Table 5/6 caption swap corrected;
+   orphaned Figure 4 citation added; both orphaned references [27]/[30] resolved by
+   citation rather than deletion; unsupported causal language softened in 4.2/4.3;
+   Conclusions item 2 changed from "adoption" to "pilot validation," resolving a
+   direct contradiction with the manuscript's own Limitations §4.6).
+   Original backed up: _archive/ANC_Fertility_Ghana_Article_FINAL_preCouncil_2026-07-12.docx
+   Outstanding (documented, not blocking): full Vancouver ascending-citation
+   renumbering across ~150 in-text instances — deferred as higher-risk than
+   value for a same-day pre-publication edit; remap logic available on request.
+
+ Poster PASS  poster/ANC_Fertility_Poster_Ghana.html
+   Current HI-EI/bespoke_v5 (Apache ECharts, inlined, offline-capable) version,
+   per ghana-repo-standards supersession (2026-06-16): the ≤60KB vanilla-JS
+   ceiling does NOT apply to this design generation. Built 2026-06-15
+   (commit b38ce49), CI green on that commit.
+
+ Dashboard PASS  github_repo/dashboard/ANC_Fertility_Dashboard_Ghana.html
+   Same HI-EI/bespoke_v5 standard as poster. Built 2026-06-15 (commit d57f420),
+   CI green (verified via GitHub Actions API, run completed/success).
+
+ Master CSV PASS  github_repo/outputs/data/Ghana_ANC_Fertility_Analysis_Dataset_FINAL.csv
+   Unchanged since 2026-04-13. Verified present, headers intact, canonical
+   values consistent with the manuscript's corrected figures.
+
+ GitHub Repo PASS  github_repo/ (origin/main @ d57f420)
+   PRE-COMMIT gate re-verified against current HEAD (dashboard/poster size
+   ceiling gates G5/G6 superseded per above, all other gates checked directly):
+     G1 no manuscript files tracked -- PASS
+     G2 no session artefacts tracked -- PASS
+     G3 no credentials tracked -- PASS
+     G4 README.md 15 h2 sections (title + 14 numbered, incl. 8a) -- PASS
+     G5/G6 superseded (HI-EI ECharts ~1.1-1.2MB is the current intended size)
+     G7 Section 8a references match actual on-disk filenames -- PASS
+     G8 CI workflow present with py_compile syntax check -- PASS
+     G9 CITATION.cff present -- PASS
+   CI status on HEAD (d57f4208): completed / success (GitHub Actions API,
+   2026-07-12 verification -- corrects a prior session's stale note that the
+   GitHub token was non-functional; it is live and was used to verify this).
+
+Canonical Values Verified (unchanged from 2026-04-30, cross-checked against
+corrected manuscript and master CSV):
+ National ANC 1988->2022: 83.1%->97.7%
+ Gini ANC 1988->2022: 0.070->0.009 (-87.5%)
+ Moran's I (TFR 2022): 0.570 (p=0.001) -- corrected from "p<0.001" in the
+   manuscript this pass; 999-permutation inference has a hard floor of 0.001
+ Moran's I (ANC 2022): -0.107 (dissipated, p=0.496)
+ ANC-TFR spatial decoupling: reframed as suggestive/associative per council
+   (not disproven, but small local-N Moran's I, n=13-14 regions, does not
+   support the manuscript's prior "established" framing)
+ Critical TFR threshold: 5.90 (RF PDP) -- reframed in the manuscript from
+   "direct policy relevance" to "exploratory, hypothesis-generating" per
+   council finding of likely train/test leakage (region repeats across 9
+   survey waves; split stratified only by survey year, the RF's top feature)
+ RF CV R2 (5-fold): 0.203 | RMSE: 5.22%
+ CEI gap: 2.2x (Greater Accra 30.8 vs North East 14.3)
+ Risk zones: Critical=55/90 obs (61%)
+
+Council Findings Requiring Post-Publication Follow-up (not submission-blocking,
+logged to AIPOCH_Learning_Log.md):
+ - Full Vancouver in-text citation renumbering (ascending by first appearance)
+ - Repeated-measures/non-independence across region-year panel not addressed
+   with clustered SEs or mixed-effects specification in any of the four
+   Discussion claims (Gini, Moran's I, RF, CEI all share this structural gap)
+ - No multiplicity correction across the stacked spatial/ML significance tests
+ - No uncertainty band around the TFR=5.90 point estimate
+
+Overall QA Verdict: QA PASSED
+/disseminate: UNLOCKED
