@@ -37,13 +37,14 @@ body{margin:0;background:#7f8c9b;font-family:'Inter',system-ui,Segoe UI,Roboto,A
 .poster{width:841mm;min-height:1189mm;margin:0 auto;background:var(--paper);display:flex;flex-direction:column}
 @media screen{.poster{box-shadow:0 8px 40px rgba(0,0,0,.35);margin:14px auto;transform-origin:top center}}
 /* HEADER */
-.ph{background:linear-gradient(120deg,var(--primary),var(--primary2));color:#fff;padding:34mm 30mm 24mm;position:relative;overflow:hidden}
+.ph{background:linear-gradient(120deg,var(--primary),var(--primary2));color:#fff;padding:30mm 30mm 24mm;position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"kicker badges" "title badges" "sub badges" "auth badges";column-gap:24mm;row-gap:5mm;align-items:start}
 .ph::after{content:"";position:absolute;right:-60mm;top:-60mm;width:180mm;height:180mm;border-radius:50%;background:rgba(255,255,255,.06)}
-.ph .kicker{font-size:10.5mm;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
-.ph h1{margin:6mm 0 4mm;font-size:22mm;line-height:1.04;font-weight:900;letter-spacing:-.01em;max-width:680mm}
-.ph .sub{font-size:8.4mm;opacity:.95;max-width:640mm;line-height:1.3}
-.ph .auth{margin-top:8mm;font-size:6.6mm;opacity:.9}
-.ph .badges{position:absolute;right:30mm;top:30mm;text-align:right;font-size:6mm;line-height:1.7}
+.ph>*{position:relative;z-index:1}
+.ph .kicker{grid-area:kicker;font-size:10mm;font-weight:800;letter-spacing:.04em;text-transform:uppercase;opacity:.86}
+.ph h1{grid-area:title;margin:0;font-size:20mm;line-height:1.12;font-weight:900;letter-spacing:0;max-width:none}
+.ph .sub{grid-area:sub;font-size:8.2mm;opacity:.95;max-width:none;line-height:1.42}
+.ph .auth{grid-area:auth;margin-top:2mm;font-size:6.4mm;opacity:.9;line-height:1.35}
+.ph .badges{grid-area:badges;position:relative;right:auto;top:auto;text-align:right;font-size:5.7mm;line-height:1.6;max-width:190mm;justify-self:end}
 .ph .pill{display:inline-block;background:rgba(255,255,255,.18);padding:2mm 6mm;border-radius:30mm;font-weight:700;margin-left:3mm}
 /* HOOK band */
 .hook{background:var(--ink);color:#fff;padding:14mm 30mm;font-size:12mm;font-weight:800;line-height:1.25;letter-spacing:-.01em}
@@ -87,12 +88,12 @@ body{margin:0;background:#7f8c9b;font-family:'Inter',system-ui,Segoe UI,Roboto,A
  <div class="auth">Valentine Golden Ghanem · Ghana COCOBOD Cocoa Clinic, Accra · ORCID 0009-0002-8332-0220</div>
 </div>
 
-<div class="hook">Over 34 years national antenatal coverage climbed from 83% to <span class="em">98%</span> ? yet fertility-linked disadvantage remains spatially patterned: the North?South <span class="em">efficiency gap remained 2.2?</span>.</div>
+<div class="hook">Over 34 years national antenatal coverage climbed from 83% to <span class="em">98%</span>, yet fertility-linked disadvantage remains spatially patterned: the North-South <span class="em">efficiency gap remained 2.2x</span>.</div>
 
 <div class="bignums">
  <div class="bn"><div class="v">+14.6<span style="font-size:11mm">pts</span></div><div class="l">National ANC rise</div><div class="s">83.1% (1988) → 97.7% (2022)</div></div>
  <div class="bn"><div class="v">−87%</div><div class="l">Inter-regional Gini</div><div class="s">coverage convergence</div></div>
- <div class="bn"><div class="v red">2.2?</div><div class="l">Care-efficiency gap</div><div class="s">Greater Accra vs North East</div></div>
+ <div class="bn"><div class="v red">2.2x</div><div class="l">Care-efficiency gap</div><div class="s">Greater Accra vs North East</div></div>
  <div class="bn"><div class="v">0.57</div><div class="l">TFR Moran's I, 2022</div><div class="s">fertility clustering intensified</div></div>
 </div>
 

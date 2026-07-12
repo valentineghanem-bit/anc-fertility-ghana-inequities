@@ -154,6 +154,14 @@ function cs(t){t=Math.max(0,Math.min(1,t));var i=Math.min(Math.floor(t*4),3),f=t
 var METRICS={anc:{key:'anc',label:'ANC %',unit:'%',rev:false},cei:{key:'cei',label:'CEI',unit:'',rev:false},tfr:{key:'tfr',label:'TFR',unit:'',rev:true}};
 function mrange(k){var vs=R.map(function(d){return d[k];});return[Math.min.apply(null,vs),Math.max.apply(null,vs)];}
 function mcolor(k,v){var r=mrange(k),t=(v-r[0])/(r[1]-r[0]);return cs(METRICS[k].rev?1-t:t);}
+var KPIS=[
+ {v:'97.7%',l:'National ANC coverage',s:'2022 endpoint',d:'up'},
+ {v:'31.9',l:'Highest CEI',s:'Greater Accra',d:'up'},
+ {v:'14.5',l:'Lowest CEI',s:'North East',d:'down'},
+ {v:'0.570',l:"TFR Moran's I",s:'2022, p=0.001',d:'up'},
+ {v:'21.6',l:'Mean regional CEI',s:'pooled 1988-2022',d:'flat'},
+ {v:'2.2x',l:'CEI equity ratio',s:'Greater Accra vs North East',d:'down'}
+];
 
 // ---- state ----
 var S={metric:'anc',clusters:{HH:1,LL:1,HL:1,LH:1,NS:1},focus:'',sort:'desc',thr:70,wf:4.5,yr:8};
