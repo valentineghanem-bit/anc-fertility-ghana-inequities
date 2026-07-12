@@ -57,7 +57,7 @@ A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care 
 |--------|-------|
 | National ANC coverage | 83.1% (1988) → 97.7% (2022) |
 | Inter-regional Gini reduction | 87.5% |
-| TFR spatial clustering (2022) | Moran's I = 0.570 (p < 0.001) |
+| TFR spatial clustering (2022) | Moran's I = 0.570 (p = 0.001; 999-permutation floor) |
 | ANC–TFR decoupling | ANC clustering dissipated; TFR clustering intensified |
 | Exploratory TFR inflection | 5.90 (RF partial dependence) |
 | CEI range | North East 14.5 → Greater Accra 31.9 (2.2× gap) |

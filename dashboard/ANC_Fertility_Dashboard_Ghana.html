@@ -129,12 +129,12 @@ input[type=range]{width:160px;accent-color:var(--primary);cursor:pointer}
 <div class="kpis" id="kpis"></div>
 
 <div class="grid">
- <div class="card span6 mapcard"><h3 id="mapTitle">ANC coverage by district</h3><p class="cap">Districts coloured by regional metric · scroll/drag to zoom &amp; pan · click a district to filter.</p><div class="zoomctl"><button type="button" id="zPlusA" title="Zoom in">+</button><button type="button" id="zMinusA" title="Zoom out">−</button><button type="button" id="zResetA" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapAnc"></div><div class="maplegend" id="legAnc"></div></div>
- <div class="card span6 mapcard"><h3>Spatial cluster typology (LISA)</h3><p class="cap">Local Moran's I clusters · scroll/drag to zoom &amp; pan · click to filter.</p><div class="zoomctl"><button type="button" id="zPlusL" title="Zoom in">+</button><button type="button" id="zMinusL" title="Zoom out">−</button><button type="button" id="zResetL" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapLisa"></div><div class="maplegend" id="legLisa"></div></div>
+ <div class="card span6 mapcard"><h3 id="mapTitle">ANC coverage by district</h3><p class="cap">District boundaries are display geometry; colours use pooled 14-unit DHS analytic values. Bono East-&gt;Bono and Western North-&gt;Western for display.</p><div class="zoomctl"><button type="button" id="zPlusA" title="Zoom in">+</button><button type="button" id="zMinusA" title="Zoom out">−</button><button type="button" id="zResetA" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapAnc"></div><div class="maplegend" id="legAnc"></div></div>
+ <div class="card span6 mapcard"><h3>Spatial cluster typology (LISA)</h3><p class="cap">Local Moran's I clusters use pooled 14-unit analytic values; modern boundary splits are harmonized for display.</p><div class="zoomctl"><button type="button" id="zPlusL" title="Zoom in">+</button><button type="button" id="zMinusL" title="Zoom out">−</button><button type="button" id="zResetL" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapLisa"></div><div class="maplegend" id="legLisa"></div></div>
  <div class="card span5"><h3 id="rankTitle">Regional ranking</h3><p class="cap">Colour = LISA cluster · dashed line = ANC threshold · click a bar to filter.</p><div class="chart" id="barRank"></div></div>
  <div class="card span4"><h3>ANC vs. Total Fertility Rate</h3><p class="cap">Regression + exploratory RF inflection near TFR 5.90 · gold ★ = what-if prediction.</p><div class="chart" id="scatter"></div></div>
  <div class="card span3"><h3>Regional profile</h3><p class="cap">Focused region vs. national mean.</p><div class="chart" id="radar"></div></div>
- <div class="card span4"><h3>Care Efficiency Index</h3><p class="cap">Dashed line = national mean (27.8).</p><div class="chart" id="lollipop"></div></div>
+ <div class="card span4"><h3>Care Efficiency Index</h3><p class="cap">Dashed line = pooled 14-unit mean (20.7).</p><div class="chart" id="lollipop"></div></div>
  <div class="card span4"><h3>Region × indicator heatmap</h3><p class="cap">Min–max scaled per indicator.</p><div class="chart" id="heatmap"></div></div>
  <div class="card span4"><h3>Burden treemap</h3><p class="cap">Area = CEI · colour = LISA · click to filter.</p><div class="chart" id="treemap"></div></div>
  <div class="card span7"><h3>National trajectory, 1988–2022</h3><p class="cap">Drag the slider above to scrub the year marker; zoom with the range slider below.</p><div class="chart" id="trend"></div></div>
@@ -149,6 +149,9 @@ var GEO={"type":"FeatureCollection","features":[{"type":"Feature","properties":{
 var LISA={HH:'#c0392b',LL:'#2980b9',HL:'#e67e22',LH:'#82c0e8',NS:'#bdc3c7'};
 var LISA_NAME={HH:'High-High',LL:'Low-Low',HL:'High-Low',LH:'Low-High',NS:'n.s.'};
 var byName={}; R.forEach(function(d){byName[d.name]=d;});
+var HREG={'BONO EAST':'BONO','WESTERN NORTH':'WESTERN'};
+function hreg(reg){return HREG[reg]||reg;}
+function hlabel(reg){var a=hreg(reg);return a===reg?reg:reg+' (analytic unit: '+a+')';}
 var RYB=[[215,48,39],[252,141,89],[254,224,144],[145,191,219],[69,117,180]];
 function cs(t){t=Math.max(0,Math.min(1,t));var i=Math.min(Math.floor(t*4),3),f=t*4-i,a=RYB[i],b=RYB[i+1];return'rgb('+Math.round(a[0]+(b[0]-a[0])*f)+','+Math.round(a[1]+(b[1]-a[1])*f)+','+Math.round(a[2]+(b[2]-a[2])*f)+')';}
 var METRICS={anc:{key:'anc',label:'ANC %',unit:'%',rev:false},cei:{key:'cei',label:'CEI',unit:'',rev:false},tfr:{key:'tfr',label:'TFR',unit:'',rev:true}};
@@ -158,8 +161,8 @@ var KPIS=[
  {v:'97.7%',l:'National ANC coverage',s:'2022 endpoint',d:'up'},
  {v:'31.9',l:'Highest CEI',s:'Greater Accra',d:'up'},
  {v:'14.5',l:'Lowest CEI',s:'North East',d:'down'},
- {v:'0.570',l:"TFR Moran's I",s:'2022, p=0.001',d:'up'},
- {v:'21.6',l:'Mean regional CEI',s:'pooled 1988-2022',d:'flat'},
+ {v:'0.570',l:"TFR Moran's I",s:'2022, p=0.001 floor',d:'up'},
+ {v:'20.7',l:'Mean regional CEI',s:'pooled 1988-2022',d:'flat'},
  {v:'2.2x',l:'CEI equity ratio',s:'Greater Accra vs North East',d:'down'}
 ];
 
@@ -167,7 +170,7 @@ var KPIS=[
 var S={metric:'anc',clusters:{HH:1,LL:1,HL:1,LH:1,NS:1},focus:'',sort:'desc',thr:70,wf:4.5,yr:8};
 function active(d){return S.clusters[d.lisa] && (!S.focus || d.name===S.focus);}
 function emph(name){var d=byName[name]; if(!d)return .15; if(!active(d))return .12; if(S.focus&&name!==S.focus)return .25; return 1;}
-function regionFromMap(name){for(var i=0;i<GEO.features.length;i++)if(GEO.features[i].properties.name===name)return GEO.features[i].properties.region;return '';}
+function regionFromMap(name){for(var i=0;i<GEO.features.length;i++)if(GEO.features[i].properties.name===name)return hreg(GEO.features[i].properties.region);return '';}
 function theme(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';}
 function ax(){return theme()==='dark'?'#90a2b6':'#6b7a8d';}
 function gl(){return theme()==='dark'?'#243443':'#e3e9f0';}
@@ -202,15 +205,15 @@ function renderSummary(){
 // ---- chart builders ----
 function mapOption(which){
  var metric = which==='lisa'?null:S.metric;var mid=which==='lisa'?'mapLisa':'mapAnc';
- var data=GEO.features.map(function(f){var reg=f.properties.region,d=byName[reg]||{};
+ var data=GEO.features.map(function(f){var reg=f.properties.region,areg=hreg(reg),d=byName[areg]||{};
   var below = metric==='anc' && d.anc!=null && d.anc<S.thr;
-  return {name:f.properties.name,region:reg,
-   itemStyle:{areaColor: metric? mcolor(metric,d[metric]||mrange(metric)[0]) : (LISA[d.lisa]||'#ccc'),
+  return {name:f.properties.name,region:reg,areg:areg,
+   itemStyle:{areaColor: metric && d[metric]!=null ? mcolor(metric,d[metric]) : (metric ? '#d9dee5' : (LISA[d.lisa]||'#ccc')),
     opacity: d.name && active(d)?1:.22,
     borderColor: below?'#c0392b':(theme()==='dark'?'#0e1620':'#fff'), borderWidth: below?1.2:.3}};
  });
- return {tooltip:{trigger:'item',formatter:function(p){var d=byName[p.data&&p.data.region]||{};
-   return '<b>'+p.name+'</b><br/>'+(p.data?p.data.region:'')+'<br/>ANC '+(d.anc!=null?d.anc+'%':'–')+' · CEI '+(d.cei!=null?d.cei:'–')+' · TFR '+(d.tfr!=null?d.tfr:'–')+' · '+(d.lisa||'–');}},
+ return {tooltip:{trigger:'item',formatter:function(p){var d=byName[p.data&&p.data.areg]||{};
+   return '<b>'+p.name+'</b><br/>'+(p.data?hlabel(p.data.region):'')+'<br/>ANC '+(d.anc!=null?d.anc+'%':'–')+' · CEI '+(d.cei!=null?d.cei:'–')+' · TFR '+(d.tfr!=null?d.tfr:'–')+' · '+(d.lisa||'–');}},
   series:[{type:'map',map:'ghana',roam:true,aspectScale:1,zoom:mapZoom[mid]||1,scaleLimit:{min:1,max:12},data:data,label:{show:false},emphasis:{itemStyle:{areaColor:'#f1c40f'},label:{show:false}},select:{disabled:true}}]};
 }
 function sortRegions(){var m=S.metric;var a=R.slice();
@@ -250,7 +253,7 @@ function lollipopOption(){
   tooltip:{trigger:'item'},
   series:[{type:'bar',barWidth:2,silent:true,z:1,data:d.map(function(x){return {value:x.cei,itemStyle:{color:gl(),opacity:emph(x.name)}};})},
    {type:'scatter',symbolSize:11,z:2,data:d.map(function(x){return {value:x.cei,region:x.name,itemStyle:{color:LISA[x.lisa],opacity:emph(x.name),borderColor:'#fff',borderWidth:1.2}};}),
-    markLine:{silent:true,symbol:'none',lineStyle:{color:'#c0392b',type:'dashed'},data:[{xAxis:27.8,label:{formatter:'mean 27.8',color:'#c0392b',fontSize:9}}]}}]};
+    markLine:{silent:true,symbol:'none',lineStyle:{color:'#c0392b',type:'dashed'},data:[{xAxis:20.7,label:{formatter:'mean 20.7',color:'#c0392b',fontSize:9}}]}}]};
 }
 function heatmapOption(){
  var inds=['ANC','CEI','TFR(inv)'];
@@ -289,7 +292,7 @@ function parallelOption(){
   series:[{type:'parallel',smooth:true,lineStyle:{width:2},data:R.map(function(d){return {value:[d.anc,d.tfr,d.cei],name:d.name,lineStyle:{color:LISA[d.lisa],opacity:emph(d.name)*.85+.05}};})}]};
 }
 function radarOption(){
- var mean={anc:0,cei:0,tfr:0};R.forEach(function(d){mean.anc+=d.anc;mean.cei+=d.cei;mean.tfr+=d.tfr;});mean.anc/=16;mean.cei/=16;mean.tfr/=16;
+ var mean={anc:0,cei:0,tfr:0};R.forEach(function(d){mean.anc+=d.anc;mean.cei+=d.cei;mean.tfr+=d.tfr;});mean.anc/=R.length;mean.cei/=R.length;mean.tfr/=R.length;
  var tgt=S.focus?byName[S.focus]:null;
  var NAT=theme()==='dark'?'#9fb0c2':'#566677';
  var ser=[{name:'National mean',value:[mean.anc,mean.cei,7-mean.tfr],lineStyle:{color:NAT,width:2,type:'dashed'},areaStyle:{color:NAT,opacity:.06},itemStyle:{color:NAT}}];

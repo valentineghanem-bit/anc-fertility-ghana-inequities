@@ -35,13 +35,13 @@ TOP_RF_IMPORTANCE = 0.437 # 43.7%
 TOP_DT_FEATURE = "tfr"
 TOP_DT_IMPORTANCE = 0.631 # 63.1%
 N_WAVES = 9
-N_REGIONS_MODERN = 16
+N_REGIONS_MODERN = 14
 
 
 def load_master():
  if not os.path.exists(MASTER_CSV):
   pytest.skip("Master dataset not found - run analysis pipeline first.")
-  return pd.read_csv(MASTER_CSV)
+ return pd.read_csv(MASTER_CSV)
 
 
 class TestDatasetStructure:

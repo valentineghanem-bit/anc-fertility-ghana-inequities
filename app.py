@@ -14,22 +14,20 @@ st.set_page_config(page_title="ANC × Fertility — Ghana BI", layout="wide", in
 
 # ---------------- real data ----------------
 REGIONS = [
-    ("GREATER ACCRA", "Gr.Accra", 96.4, 34.43, 2.8, "LL"),
-    ("ASHANTI", "Ashanti", 91.3, 28.53, 3.2, "LL"),
-    ("CENTRAL", "Central", 87.3, 24.25, 3.6, "LL"),
-    ("EASTERN", "Eastern", 85.6, 22.53, 3.8, "LL"),
-    ("WESTERN", "Western", 83.4, 21.38, 3.9, "LH"),
-    ("VOLTA", "Volta", 81.2, 19.33, 4.2, "LH"),
-    ("BONO", "Bono", 76.5, 17.79, 4.3, "NS"),
-    ("AHAFO", "Ahafo", 74.8, 16.62, 4.5, "NS"),
-    ("BONO EAST", "Bono E", 73.1, 15.89, 4.6, "NS"),
-    ("OTI", "Oti", 72.4, 15.08, 4.8, "NS"),
-    ("WESTERN NORTH", "W.North", 67.8, 13.56, 5.0, "NS"),
-    ("UPPER EAST", "Upper East", 61.4, 11.37, 5.4, "HL"),
-    ("UPPER WEST", "Upper West", 57.2, 10.04, 5.7, "HL"),
-    ("NORTHERN", "Northern", 52.1, 8.68, 6.0, "HH"),
-    ("SAVANNAH", "Savannah", 48.3, 7.67, 6.3, "HH"),
-    ("NORTHERN EAST", "N.East", 43.8, 6.64, 6.6, "HH"),
+    ("GREATER ACCRA", "Gr.Accra", 95.6, 31.9, 3.1, "LL"),
+    ("BONO", "Bono", 98.6, 26.6, 3.7, "NS"),
+    ("EASTERN", "Eastern", 93.9, 23.2, 4.2, "LL"),
+    ("ASHANTI", "Ashanti", 96.4, 23.0, 4.4, "LL"),
+    ("WESTERN", "Western", 94.2, 21.8, 4.5, "LH"),
+    ("VOLTA", "Volta", 90.4, 20.4, 4.6, "LH"),
+    ("UPPER EAST", "Upper East", 92.6, 20.3, 4.6, "HL"),
+    ("AHAFO", "Ahafo", 95.6, 20.2, 4.9, "NS"),
+    ("CENTRAL", "Central", 92.8, 20.1, 4.8, "LL"),
+    ("OTI", "Oti", 97.1, 18.7, 5.2, "HL"),
+    ("UPPER WEST", "Upper West", 90.6, 18.5, 5.0, "HL"),
+    ("SAVANNAH", "Savannah", 95.9, 16.5, 5.8, "HH"),
+    ("NORTHERN", "Northern", 85.1, 14.8, 5.8, "HH"),
+    ("NORTH EAST", "N.East", 95.6, 14.5, 6.6, "HH"),
 ]
 df = pd.DataFrame(REGIONS, columns=["region", "short", "anc", "cei", "tfr", "lisa"])
 LISA = {"HH": "#c0392b", "LL": "#2980b9", "HL": "#e67e22", "LH": "#82c0e8", "NS": "#bdc3c7"}
@@ -56,14 +54,14 @@ fdf = df[df.lisa.isin(lisa_pick) & df.region.isin(region_pick)]
 
 # ---------------- header + KPIs ----------------
 st.markdown("### Antenatal Care Coverage & Fertility Inequities — Ghana")
-st.caption("Care Efficiency Index (CEI = ANC% ÷ TFR) · colourblind-safe RdYlBu · " + f"{len(fdf)} of 16 regions in view")
+st.caption("Care Efficiency Index (CEI = ANC% / TFR) · colourblind-safe RdYlBu · " + f"{len(fdf)} of 14 harmonized analytic units in view")
 k = st.columns(6)
 k[0].metric("National ANC, 2022", "97.7%", "+14.6 pts vs 1988")
-k[1].metric("Highest region", "96.4%", "Greater Accra")
-k[2].metric("Lowest region", "43.8%", "North East", delta_color="inverse")
-k[3].metric("Moran's I (ANC)", "0.68", "p<0.001")
-k[4].metric("National CEI", "27.8")
-k[5].metric("Equity gap", "2.8×", "Accra ÷ N.East", delta_color="inverse")
+k[1].metric("Highest regional ANC", "98.6%", "Bono")
+k[2].metric("Lowest regional ANC", "85.1%", "Northern", delta_color="inverse")
+k[3].metric("TFR Moran's I", "0.570", "p=0.001 floor")
+k[4].metric("Mean regional CEI", "20.7")
+k[5].metric("CEI equity ratio", "2.2×", "Accra ÷ N.East", delta_color="inverse")
 
 # ---------------- row 1: map + ranking ----------------
 c1, c2 = st.columns([3, 2])
@@ -110,7 +108,7 @@ with c4:
     fig.add_trace(go.Scatter(x=r.cei, y=r.short, mode="markers", marker=dict(size=12, color=[LISA[l] for l in r.lisa])))
     for _, row in r.iterrows():
         fig.add_shape(type="line", x0=0, x1=row.cei, y0=row.short, y1=row.short, line=dict(color="#dfe6ee", width=2))
-    fig.add_vline(x=27.8, line_dash="dash", line_color="#c0392b", annotation_text="mean 27.8")
+    fig.add_vline(x=20.7, line_dash="dash", line_color="#c0392b", annotation_text="mean 20.7")
     fig.update_layout(height=360, margin=dict(l=4, r=4, t=4, b=4), xaxis_title="CEI")
     st.plotly_chart(fig, use_container_width=True)
 with c5:

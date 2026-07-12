@@ -253,11 +253,11 @@ def fig_risk_zone_pie():
  'Workhorse': '#2563EB', 'Resilient': GH_GREEN}
  fig = px.pie(d, names='Risk_Zone', values='Count',
  color='Risk_Zone', color_discrete_map=RISK_COLORS,
- title='Risk Zone Distribution (n=90 region-year observations)')
+ title='Risk Zone Distribution (n=92 region-year observations)')
  fig.update_traces(textposition='inside', textinfo='percent+label',
  hovertemplate='<b>%{label}</b><br>N: %{value}<br>%{percent}<extra></extra>')
  fig.update_layout(**base_layout(
- title='Risk Zone Distribution (n=90 region-year observations)', height=380))
+ title='Risk Zone Distribution (n=92 region-year observations)', height=380))
  return fig
 
 
@@ -291,10 +291,10 @@ def make_kpi_cards():
  kpis = [
  ('National ANC 2022', f"{d22['Skilled_ANC_pct'].mean():.1f}%", GH_GREEN),
  ('Gini Decline 1988→2022', '−87.5%', GH_GOLD),
- ("TFR Moran's I 2022", '0.570**', GH_RED),
+ ("TFR Moran's I 2022", '0.570', GH_RED),
  ('Critical TFR Threshold', '5.90', '#b8860b'),
- ('CEI Gap (GA / NE)', '30.8 / 14.3', GH_GREEN),
- ('Risk Zone: Critical', '55/90 obs.', GH_RED),
+ ('CEI Gap (GA / NE)', '31.9 / 14.5', GH_GREEN),
+ ('Risk Zone: Critical', '23/92 obs.', GH_RED),
  ]
  cards = []
  for label, value, color in kpis:
