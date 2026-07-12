@@ -13,7 +13,7 @@
 
 ## 1. Abstract
 
-A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care (ANC) coverage and total fertility rate (TFR) across 14 harmonized Ghana DHS regional analytic units, using nine survey waves. The study introduces the **Care Efficiency Index** (CEI = ANC% / TFR) as an exploratory composite indicator to expose persistent regional inequities obscured by national coverage convergence. Spatial autocorrelation analysis shows ANC–TFR decoupling by 2022, with the Northern Belt remaining a persistent high-TFR spatial cluster.
+A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care (ANC) coverage and total fertility rate (TFR) across all 16 Ghana administrative regions, using nine survey waves. The study introduces the **Care Efficiency Index** (CEI = ANC% / TFR) as an exploratory composite indicator to expose persistent regional inequities obscured by national coverage convergence. Spatial autocorrelation analysis shows ANC–TFR decoupling by 2022, with the Northern Belt remaining a persistent high-TFR spatial cluster.
 
 ---
 
@@ -57,8 +57,8 @@ A 34-year (1988–2022) longitudinal spatial analysis of skilled antenatal care 
 | Metric | Value |
 |--------|-------|
 | National ANC coverage | 83.1% (1988) → 97.7% (2022) |
-| Inter-regional Gini reduction | 87.5% |
-| TFR spatial clustering (2022) | Moran's I = 0.570 (p = 0.001; 999-permutation floor) |
+| Inter-regional Gini reduction | 87.9% |
+| TFR spatial clustering (2022) | Moran's I = 0.606 (p = 0.001; 999-permutation floor) |
 | ANC–TFR decoupling | ANC clustering dissipated; TFR clustering intensified |
 | Exploratory TFR inflection | 5.90 (RF partial dependence) |
 | CEI range | North East 14.5 → Greater Accra 31.9 (2.2× gap) |
