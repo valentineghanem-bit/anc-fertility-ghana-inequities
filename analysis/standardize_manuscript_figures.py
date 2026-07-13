@@ -95,39 +95,64 @@ def force_near_white_background(image: Image.Image) -> Image.Image:
 
 def add_cartographic_band(image: Image.Image) -> Image.Image:
     width, height = image.size
-    band_h = max(190, int(height * 0.085))
+    band_h = max(230, int(height * 0.12))
     margin = max(36, int(width * 0.035))
     out = Image.new("RGB", (width, height + band_h), "white")
     out.paste(image, (0, 0))
     draw = ImageDraw.Draw(out)
 
-    y0 = height + int(band_h * 0.18)
-    arrow_x = margin + 34
-    draw.line((arrow_x, y0 + 82, arrow_x, y0 + 22), fill="black", width=max(4, width // 500))
+    body_size = max(22, width // 58)
+    bold_size = max(25, width // 50)
+    label_size = max(30, width // 48)
+    note_size = max(20, width // 70)
+    body_font = font(body_size, False)
+    body_bold = font(bold_size, True)
+    label_font = font(label_size, True)
+    note_font = font(note_size, False)
+    arrow_h = max(90, width // 28)
+    arrow_w = max(18, width // 120)
+    arrow_x = margin + max(38, width // 80)
+    y0 = height + int(band_h * 0.16)
+    draw.line(
+        (arrow_x, y0 + arrow_h, arrow_x, y0 + int(arrow_h * 0.28)),
+        fill="black",
+        width=max(5, width // 420),
+    )
     draw.polygon(
-        [(arrow_x, y0), (arrow_x - 16, y0 + 30), (arrow_x + 16, y0 + 30)],
+        [
+            (arrow_x, y0),
+            (arrow_x - arrow_w, y0 + int(arrow_h * 0.33)),
+            (arrow_x + arrow_w, y0 + int(arrow_h * 0.33)),
+        ],
         fill="black",
     )
-    draw.text((arrow_x - 8, y0 + 88), "N", fill="black", font=font(28, True))
-    draw.text((arrow_x + 42, y0 + 21), "Bearing: true north (0 deg)", fill="#222222", font=font(24, True))
+    draw.text((arrow_x - arrow_w // 2, y0 + arrow_h + 8), "N", fill="black", font=label_font)
+    draw.text(
+        (arrow_x + max(48, width // 70), y0 + int(arrow_h * 0.25)),
+        "Bearing: true north (0 deg)",
+        fill="#222222",
+        font=body_bold,
+    )
 
-    bar_x = int(width * 0.46)
-    bar_y = y0 + 42
-    seg = max(100, int(width * 0.11))
-    bar_h = 16
+    bar_x = int(width * 0.42)
+    bar_y = y0 + int(arrow_h * 0.44)
+    seg = max(125, int(width * 0.115))
+    bar_h = max(18, width // 150)
     draw.rectangle((bar_x, bar_y, bar_x + seg, bar_y + bar_h), fill="black", outline="black")
     draw.rectangle((bar_x + seg, bar_y, bar_x + 2 * seg, bar_y + bar_h), fill="white", outline="black")
-    draw.line((bar_x, bar_y, bar_x + 2 * seg, bar_y), fill="black", width=2)
-    draw.text((bar_x - 8, bar_y + 24), "0", fill="#222222", font=font(20))
-    draw.text((bar_x + seg - 28, bar_y + 24), "100", fill="#222222", font=font(20))
-    draw.text((bar_x + 2 * seg - 38, bar_y + 24), "200 km", fill="#222222", font=font(20))
-    draw.text((bar_x, bar_y - 31), "Approximate scale", fill="#222222", font=font(22, True))
+    draw.line((bar_x, bar_y, bar_x + 2 * seg, bar_y), fill="black", width=max(2, width // 1200))
+    label_y = bar_y + bar_h + max(10, width // 260)
+    draw.text((bar_x - 8, label_y), "0", fill="#222222", font=body_font)
+    draw.text((bar_x + seg - max(30, width // 115), label_y), "100", fill="#222222", font=body_font)
+    draw.text((bar_x + 2 * seg - max(50, width // 82), label_y), "200 km", fill="#222222", font=body_font)
+    title_y = max(height + 6, bar_y - bold_size - max(18, width // 170))
+    draw.text((bar_x, title_y), "Approximate scale", fill="#222222", font=body_bold)
 
     note = (
         "Cartographic note: white background; regional/district display geometry; "
         "map orientation and scale are for manuscript interpretation."
     )
-    draw.text((margin, height + band_h - 44), note, fill="#444444", font=font(20))
+    draw.text((margin, height + band_h - max(60, width // 70)), note, fill="#444444", font=note_font)
     return out
 
 
