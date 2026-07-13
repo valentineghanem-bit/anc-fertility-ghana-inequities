@@ -14,10 +14,18 @@ authors:
     orcid: "https://orcid.org/0009-0002-8332-0220"
     affiliation: "Ghana COCOBOD Cocoa Clinic, Accra, Ghana"
     email: valentineghanem@gmail.com
-version: "1.0.0"
+version: "1.0.3"
 date-released: "2026-07-13"
 license: MIT
 repository-code: "https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities"
+doi: "10.5281/zenodo.21340350"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21340350"
+    description: "Concept DOI — always resolves to the latest archived version on Zenodo."
+  - type: doi
+    value: "10.5281/zenodo.21340351"
+    description: "Version-specific DOI for v1.0.3."
 keywords:
   - antenatal care
   - fertility

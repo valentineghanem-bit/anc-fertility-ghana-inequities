@@ -1,6 +1,6 @@
 # Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys
 
-[![CI](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220)
+[![CI](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21340350.svg)](https://doi.org/10.5281/zenodo.21340350)
 
 **Author:** Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana
 **ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
@@ -189,16 +189,20 @@ This study analyses publicly released aggregate data from the Ghana Demographic 
 
 ## 11. Citation
 
+**Archived release (Zenodo, versioned DOI):** [10.5281/zenodo.21340350](https://doi.org/10.5281/zenodo.21340350) — always resolves to the latest archived version.
+
 **APA:**
-Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys.* GitHub. https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities
+Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys* (Version 1.0.3) [Data set and software]. Zenodo. https://doi.org/10.5281/zenodo.21340350
 
 **BibTeX:**
 ```bibtex
-@misc{ghanem2026ancfertility,
-  author = {Ghanem, Valentine Golden},
-  title  = {Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys},
-  year   = {2026},
-  url    = {https://github.com/valentineghanem-bit/anc-fertility-ghana-inequities}
+@software{ghanem2026ancfertility,
+  author  = {Ghanem, Valentine Golden},
+  title   = {Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys},
+  year    = {2026},
+  version = {1.0.3},
+  doi     = {10.5281/zenodo.21340350},
+  url     = {https://doi.org/10.5281/zenodo.21340350}
 }
 ```
 
