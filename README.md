@@ -189,10 +189,12 @@ This study analyses publicly released aggregate data from the Ghana Demographic 
 
 ## 11. Citation
 
-**Archived release (Zenodo, versioned DOI):** [10.5281/zenodo.21340350](https://doi.org/10.5281/zenodo.21340350) — always resolves to the latest archived version.
+**Archived release (Zenodo concept DOI, all versions):** [10.5281/zenodo.21340350](https://doi.org/10.5281/zenodo.21340350) - resolves to the latest archived version.
+
+**Version-specific DOI for GitHub release v1.0.3:** [10.5281/zenodo.21340351](https://doi.org/10.5281/zenodo.21340351)
 
 **APA:**
-Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys* (Version 1.0.3) [Data set and software]. Zenodo. https://doi.org/10.5281/zenodo.21340350
+Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys* (Version 1.0.3) [Data set and software]. Zenodo. https://doi.org/10.5281/zenodo.21340351
 
 **BibTeX:**
 ```bibtex
@@ -201,8 +203,8 @@ Ghanem, V. G. (2026). *Temporal and Spatial Dynamics of Antenatal Care Coverage 
   title   = {Temporal and Spatial Dynamics of Antenatal Care Coverage and Fertility Inequities in Ghana: A Subnational Ecological Study Using Ghana Demographic and Health Surveys},
   year    = {2026},
   version = {1.0.3},
-  doi     = {10.5281/zenodo.21340350},
-  url     = {https://doi.org/10.5281/zenodo.21340350}
+  doi     = {10.5281/zenodo.21340351},
+  url     = {https://doi.org/10.5281/zenodo.21340351}
 }
 ```
 
